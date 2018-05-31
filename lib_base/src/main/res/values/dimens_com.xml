@@ -1,0 +1,51 @@
+<resources>
+    <!--  ################### PinGo的公共尺寸（开始）################### -->
+    
+    <!-- 文字大小 1.x版本沿用 -->
+    <dimen name="com_text_size_content">18sp</dimen>  <!-- 正文字号：36px -->
+    <dimen name="com_text_size_tips">12sp</dimen>     <!-- 最小字号：24px -->
+    
+    <!-- 文字 -->
+    <dimen name="com_text_fxl">20sp</dimen>              <!-- 大标题 -->
+    <dimen name="com_text_fl">18sp</dimen>              <!-- 正文字号：大 -->
+    <dimen name="com_text_fm">16sp</dimen>              <!-- 正文字号：中 -->
+    <dimen name="com_text_fs">13sp</dimen>                <!-- 正文字号：小 -->
+    <dimen name="com_text_fxs">10sp</dimen>              <!-- 正文字号：最小 -->
+    
+    <dimen name="com_space_grid">2dp</dimen>              <!-- 九宫格间距 -->
+    <!-- 间距 -->
+    <dimen name="com_space_unit">10dp</dimen>              <!-- 页面间距一般都只这个间距的整数倍 -->
+    <dimen name="com_space_unit2">20dp</dimen>          <!-- 2 * 单位间距 -->
+    <dimen name="com_space_unit3">30dp</dimen>          <!-- 3 * 单位间距 -->
+    <dimen name="com_space_unit4">40dp</dimen>          <!-- 4 * 单位间距 -->
+    <dimen name="com_space_unit5">50dp</dimen>          <!-- 5 * 单位间距 -->
+    <dimen name="com_space_unit6">60dp</dimen>          <!-- 6 * 单位间距 -->
+    <dimen name="com_space_unit_half">5dp</dimen>       <!-- 0.5 * 单位间距 -->
+    <dimen name="com_space_unit1_half">15dp</dimen>       <!-- 1.5 * 单位间距 -->
+    
+    <!-- listview的item的通用高度 -->
+    <dimen name="com_list_item_height">64dp</dimen>             <!-- 适用于大于等于三行数据的情况 -->
+    <!--  ################### PinGo的公共尺寸（结束）################### -->
+    
+    <!-- 设置 -->
+    <dimen name="com_text_size_setting">18sp</dimen>
+
+    <!-- 菜单对话框相关 -->
+    <dimen name="com_menu_dialog_item_height">40dp</dimen>
+    <dimen name="com_menu_dialog_item_margin_left">20dp</dimen>
+    <dimen name="com_menu_dialog_item_text_size">16sp</dimen>
+
+    <!-- 设置页、用户个人页的Item条目大小 -->
+    <dimen name="com_line_item_height">56dp</dimen>
+    
+    <!-- 头像相关，目前头像定义有三套大小。。。。 -->
+    <dimen name="head_icon_size_64">64dp</dimen>        <!-- 列表页面的头像使用 -->
+    <dimen name="head_icon_size_hl">86dp</dimen>
+    <dimen name="head_icon_size_hm">48dp</dimen>       
+    <dimen name="head_icon_size_hs">32dp</dimen>        
+    <dimen name="head_icon_size_hxs">24dp</dimen>        
+    
+    <!-- 通用的圆角半径 -->
+    <dimen name="com_radius_big">22dp</dimen>
+    <dimen name="com_radius">8dp</dimen>
+</resources>

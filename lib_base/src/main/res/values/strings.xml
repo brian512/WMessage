@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Common-->
+    <string name="setting">设置</string>
+    <string name="tips">提示</string>
+    <string name="send">发送</string>
+    <string name="delete">删除</string>
+    <string name="save">保存</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="clear">清除</string>
+    <string name="close">关闭</string>
+    <string name="copy">复制</string>
+    <string name="finish">完成</string>
+    <string name="share">分享</string>
+    <string name="exit">退出</string>
+    <string name="back">返回</string>
+    <string name="sign_in">登录</string>
+    <string name="sign_up">注册</string>
+    <string name="logout">退出登录</string>
+    <string name="publish">发布</string>
+    <string name="confirm">确认</string>
+    <string name="go">开始</string>
+    <string name="sure">确定</string>
+
+    <string name="album">相册</string>
+    <string name="camera">相机</string>
+    <string name="follow">关注</string>
+    <string name="following">已关注</string>
+
+    <string name="more">更多</string>
+    <string name="refresh">刷新</string>
+    <string name="report">举报</string>
+    <string name="block">拉黑</string>
+    <string name="reset">重置</string>
+    <string name="password">密码</string>
+    <string name="sex_female">女</string>
+    <string name="sex_male">男</string>
+    <string name="sex_male1">男生</string>
+    <string name="sex_female1">女生</string>
+    <string name="selectall">全选</string>
+    <string name="next_step">下一步</string>
+    <string name="email">E-mail</string>
+    <string name="link">链接</string>
+    <string name="sex_boy">男生</string>
+    <string name="sex_girl">女生</string>
+
+    <string name="waiting">请稍等&#8230;</string>
+    <string name="loading">加载中&#8230;</string>
+
+    <string name="accept">接受</string>
+    <string name="reject">拒绝</string>
+
+    <string name="qq">QQ好友</string>
+    <string name="qzone">QQ空间</string>
+    <string name="weibo">微博</string>
+    <string name="weixin">微信</string>
+    <string name="moment">朋友圈</string>
+
+    <string name="video">视频</string>
+    <string name="picture">图片</string>
+    <string name="photo">相片</string>
+
+    <string name="notify_never">不再提醒</string>
+
+
+    <string-array name="time_week_array">
+        <item>周日</item>
+        <item>周一</item>
+        <item>周二</item>
+        <item>周三</item>
+        <item>周四</item>
+        <item>周五</item>
+        <item>周六</item>
+    </string-array>
+
+    <string-array name="time_month_array">
+        <item>1月</item>
+        <item>2月</item>
+        <item>3月</item>
+        <item>4月</item>
+        <item>5月</item>
+        <item>6月</item>
+        <item>7月</item>
+        <item>8月</item>
+        <item>9月</item>
+        <item>10月</item>
+        <item>11月</item>
+        <item>12月</item>
+    </string-array>
+
+    <string-array name="time_constellation_array">
+        <item>摩羯座</item>
+        <item>水瓶座</item>
+        <item>双鱼座</item>
+        <item>白羊座</item>
+        <item>金牛座</item>
+        <item>双子座</item>
+        <item>巨蟹座</item>
+        <item>狮子座</item>
+        <item>处女座</item>
+        <item>天秤座</item>
+        <item>天蝎座</item>
+        <item>射手座</item>
+    </string-array>
+
+
+
+    <string name="time_current">刚刚</string>
+    <string name="time_before_second">秒前</string>
+    <string name="time_before_minute">分钟前</string>
+    <string name="time_before_hours">小时前</string>
+    <string name="time_before_days">天前</string>
+    <string name="time_yesterday">昨天</string>
+
+    <!--上拉加载-->
+    <string name="refresh_footer_pullup">上拉加载更多</string>
+    <string name="refresh_footer_release">释放立即加载</string>
+    <string name="refresh_footer_loading">正在加载...</string>
+    <string name="refresh_footer_refreshing">正在刷新...</string>
+    <string name="refresh_footer_finish">加载完成</string>
+    <string name="refresh_footer_failed">加载失败,网络不佳</string>
+    <string name="refresh_footer_allloading">没有更多了</string>
+
+    <!--下拉更新-->
+    <string name="refresh_header_pulldown">下拉可以刷新</string>
+    <string name="refresh_header_refreshing">正在刷新...</string>
+    <string name="refresh_header_loading">正在加载...</string>
+    <string name="refresh_header_release">释放立即刷新</string>
+    <string name="refresh_header_finish">刷新完成</string>
+    <string name="refresh_header_failed">刷新失败</string>
+    <string name="refresh_header_lasting">上次更新: </string>
+
+    <string name="refresh_failed_tips">网络不给力</string>
+    <string name="userterm_agreement_tips">同意用户协议</string>
+    <string name="start_app">开始使用</string>
+
+    <string name="wallet">钱包</string>
+
+</resources>

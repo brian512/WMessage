@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!--  ################### PinGo的公共颜色（开始）################### -->
+    
+    <!-- 主题色 -->
+    <color name="com_th">#561191</color>           <!-- 主题颜色-->
+    <color name="com_si1">#ff528e</color>           <!-- 主题颜色-->
+    <color name="com_si2">#0dbdbb</color>           <!-- 辅助色-->
+
+    <!-- 通用的文字颜色 -->
+    <color name="com_text_tx1">#303030</color>          <!-- 重要级文字/标题信息 -->
+    <color name="com_text_tx2">#9a9a9a</color>          <!-- 辅助次要文字信息 -->
+    <color name="com_text_tx3">#a6a6a6</color>          <!-- 弱文字 -->
+
+    
+    <!-- 通用背景颜色 -->
+    <color name="com_bg1">#ffffff</color>               <!-- 白色背景 -->
+    <color name="com_bg2">#000000</color>               <!-- 黑色背景 -->
+    <color name="com_bg3">#f7f7f7</color>               <!-- 文章图片的默认图颜色 -->
+    <color name="com_bg_li1">#d7d7d7</color>          <!-- 分割线 -->
+    <color name="com_bg_st">#f0f0f0</color>               <!-- 背景色,用于分割模块底色 -->
+    <color name="com_bg_divider_1">#ffdddddd</color>
+
+    <!--  ################### PinGo的公共颜色（结束）################### -->
+
+
+    <!-- 公共背景颜色 -->
+    <color name="com_bg_white">#ffffff</color> 
+    <color name="com_bg_gray_1">#fafafa</color><!-- 比com_bg_gray浅一点 -->
+    <color name="com_bg_gray_2">#e5e5e5</color><!-- 比com_bg_gray深一点 -->
+    <color name="com_bg_gray_3">#f7f7f7</color>
+    <color name="com_bg_black">#000000</color>
+    <color name="com_bg_translucence_white">#1fffffff</color>
+
+    <!-- UI组建背景 -->
+    <color name="com_bg_dlg">#fafafa</color>
+
+    <!-- 公共字体颜色 -->
+    <color name="com_text_black">#000000</color>
+    <color name="com_text_black_1">#333333</color> <!-- 浅一点 -->
+    <color name="com_text_black_trans">#20000000</color>
+    <color name="com_text_white">#ffffff</color>
+    <color name="com_text_white_trans">#7fffffff</color> 
+    <color name="com_text_red">#e95c52</color>
+    <color name="com_text_gray_0">#666666</color> <!-- 深一点 --> 
+    <color name="com_text_gray_1">#999999</color> <!-- 浅一点 -->
+    <color name="com_text_hint">#6f999999</color> <!-- 编辑框默认文本颜色textColorHint -->
+    <color name="com_text_yellow">#ffaf40</color>
+    <color name="com_text_black_fifty_tran">#7f000000</color>
+
+    <!-- 公共分界线颜色 -->
+    <color name="com_divider_gray_0">#e5e5e5</color> <!-- 浅一点 -->
+    <color name="com_divider_gray_1">#cfcfcf</color> <!-- 深一点 -->
+
+    <!-- 公共弹框蒙层背景色 -->
+    <color name="com_popwindow_bg">#7f000000</color>
+
+    <!-- 列表Item点击、按下时的颜色 -->
+    <color name="com_item_press_bg">#3f000000</color>
+
+    <!-- 透明背景颜色 -->
+    <color name="com_transparent">#00000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- 90%黑色透明度-->
+    <color name="ten_percent_transparency_black">#19000000</color>
+
+    <!-- 70%黑色透明度 -->
+    <color name="seventy_transparency_black">#b2000000</color>
+
+    <!-- 60%黑色透明度 -->
+    <color name="sixty_transparency_black">#98000000</color>
+
+    <!-- 50%黑色透明度 -->
+    <color name="half_transparency_black">#7f000000</color>
+
+    <!-- 40%黑色透明度-->
+    <color name="forty_percent_transparency_black">#5d000000</color>
+
+    <!-- 30%黑色透明度-->
+    <color name="thirty_percent_transparency_black">#4c000000</color>
+
+    <!-- 20%黑色透明度-->
+    <color name="twenty_percent_transparency_black">#33000000</color>
+
+    <!-- 90%白色透明度 -->
+    <color name="ninety_transparency_white">#e5ffffff</color>
+
+    <!-- 70%白色透明度 -->
+    <color name="seventy_transparency_white">#b2ffffff</color>
+
+    <!-- 60%白色透明度 -->
+    <color name="sixty_transparency_white">#98ffffff</color>
+
+    <!-- 50%白色透明度 -->
+    <color name="half_transparency_white">#7fffffff</color>
+
+    <!-- 40%白色透明度 -->
+    <color name="forty_transparency_white">#5effffff</color>
+
+    <!-- 30%白色透明度 -->
+    <color name="thirty_percent_transparency_white">#4cffffff</color>
+
+    <!-- 20%白色透明度 -->
+    <color name="twenty_percent_transparency_white">#33ffffff</color>
+
+</resources>
