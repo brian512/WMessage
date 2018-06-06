@@ -27,4 +27,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     implementation project(':lib_base')
+
+    implementation 'cn.bmob.android:bmob-im:2.1.0@aar'
+    implementation 'cn.bmob.android:bmob-sdk:3.6.1'
 }
