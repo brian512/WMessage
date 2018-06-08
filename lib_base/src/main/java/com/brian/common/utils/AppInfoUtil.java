@@ -12,6 +12,9 @@ import android.text.TextUtils;
 
 import com.brian.common.tools.Env;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.List;
 import java.util.Locale;
 
@@ -215,4 +218,22 @@ public class AppInfoUtil {
      * 是否为中文环境
      */
     public static boolean sIsChinese = false;
+
+
+
+    /**
+     * 获取当前运行的进程名
+     */
+    public static String getMyProcessName() {
+        try {
+            File file = new File("/proc/" + android.os.Process.myPid() + "/" + "cmdline");
+            BufferedReader mBufferedReader = new BufferedReader(new FileReader(file));
+            String processName = mBufferedReader.readLine().trim();
+            mBufferedReader.close();
+            return processName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -54,7 +54,7 @@ public class TitleBar extends RelativeLayout {
     /**
      * 设置左边按钮的显示 默认是显示
      */
-    public void setLeftImageVisible(int visible) {
+    public void setLeftVisible(int visible) {
         mLeftView.setVisibility(visible);
     }
 
@@ -75,7 +75,7 @@ public class TitleBar extends RelativeLayout {
     /**
      * 设置左边按钮的显示 默认不显示
      */
-    public void setRightImageVisible(int visible) {
+    public void setRightVisible(int visible) {
         mRightView.setVisibility(visible);
     }
 
@@ -114,4 +114,11 @@ public class TitleBar extends RelativeLayout {
         mTitleText.setTextColor(color);
     }
 
+    public TextView getLeftView() {
+        return mLeftView;
+    }
+
+    public TextView getRightView() {
+        return mRightView;
+    }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * 消息分发
+ * @author huamm
  */
 public class MessageDispatcher {
 

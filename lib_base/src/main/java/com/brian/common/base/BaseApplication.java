@@ -7,6 +7,7 @@ import android.os.StrictMode;
 
 import com.brian.common.tools.BuglyHelper;
 import com.brian.common.tools.Env;
+import com.brian.common.utils.AppInfoUtil;
 import com.brian.common.utils.LogUtil;
 
 public class BaseApplication extends Application {
@@ -45,4 +46,9 @@ public class BaseApplication extends Application {
         super.onTrimMemory(level);
         LogUtil.d("level=" + level);
     }
+
+    public boolean isMainProcess() {
+        return getApplicationInfo().packageName.equals(AppInfoUtil.getMyProcessName());
+    }
+
 }

@@ -1,10 +1,5 @@
 package com.brian.wmessage.message;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.widget.Toast;
-
 import com.brian.common.utils.LogUtil;
 
 import java.util.List;
@@ -16,9 +11,11 @@ import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.event.MessageEvent;
 import cn.bmob.newim.event.OfflineMessageEvent;
 import cn.bmob.newim.listener.BmobIMMessageHandler;
-import cn.bmob.newim.notification.BmobNotificationManager;
-import cn.bmob.v3.exception.BmobException;
 
+/**
+ * 消息接收处理
+ * @author huamm
+ */
 public class WMessageHandler extends BmobIMMessageHandler {
 
 
@@ -53,8 +50,6 @@ public class WMessageHandler extends BmobIMMessageHandler {
     private void executeMessage(final MessageEvent event) {
         BmobIMMessage msg = event.getMessage();
         LogUtil.i(msg.toString());
-        LogUtil.i(msg.getExtra());
-        LogUtil.i(msg.getExtra());
         if (BmobIMMessageType.getMessageTypeValue(msg.getMsgType()) == 0) {
             //自定义消息类型：0
             processCustomMessage(msg, event.getFromUserInfo());

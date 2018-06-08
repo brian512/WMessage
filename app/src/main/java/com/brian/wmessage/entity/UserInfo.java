@@ -1,6 +1,23 @@
 package com.brian.wmessage.entity;
 
-import com.brian.common.datacenter.network.BaseType;
+import cn.bmob.v3.BmobUser;
 
-public class UserInfo extends BaseType {
+/**
+ * @author huamm
+ */
+public class UserInfo extends BmobUser {
+
+    private String avatar;
+
+    public String getUserId() {
+        return getObjectId();
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 }
