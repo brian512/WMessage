@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.brian.common.utils.LogUtil;
+import com.brian.common.utils.RandomUtil;
 import com.brian.wmessage.entity.Friend;
 import com.brian.wmessage.entity.UserInfo;
 import com.brian.wmessage.message.WMessageHandler;
@@ -44,6 +45,14 @@ public class BmobHelper {
     public void init(Context context) {
         BmobIM.init(context);
         BmobIM.registerDefaultMessageHandler(new WMessageHandler());
+    }
+
+    public boolean isMySelef(String userId) {
+        return TextUtils.equals(userId, getCurrentUser().getUserId());
+    }
+
+    public UserInfo getCurrentUser() {
+        return BmobUser.getCurrentUser(UserInfo.class);
     }
 
     public boolean checkOnlineState() {
@@ -167,6 +176,7 @@ public class BmobHelper {
         final UserInfo user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
+        user.setAvatar("" + RandomUtil.getRandInt(UserInfo.DEFAULT_HEADS.length));
         user.signUp(new SaveListener<UserInfo>() {
             @Override
             public void done(UserInfo user, BmobException e) {

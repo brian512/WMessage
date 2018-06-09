@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.brian.common.base.BaseFragment;
+import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.R;
 import com.brian.wmessage.entity.Conversation;
 import com.brian.wmessage.entity.IMConversation;
 import com.brian.wmessage.entity.P2PConversation;
+import com.brian.wmessage.message.MessageDispatcher;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +22,7 @@ import java.util.List;
 
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
+import cn.bmob.newim.bean.BmobIMMessage;
 
 /**
  * 回话列表
@@ -52,6 +55,26 @@ public class ConversationListFragment extends BaseFragment {
     }
 
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        MessageDispatcher.getInstance().registerListener(mMessageListener);
+    }
+
+    @Override
+    public void onDestroy() {
+        MessageDispatcher.getInstance().unregisterListener(mMessageListener);
+        super.onDestroy();
+    }
+
+    private MessageDispatcher.IMessageListener mMessageListener = new MessageDispatcher.IMessageListener() {
+        @Override
+        public void onReceiveMessage(BmobIMMessage message) {
+            LogUtil.d("message=" + message.toString());
+            mListAdapter.addOrUpdate(0, new P2PConversation(new IMConversation(message.getBmobIMConversation())), message);
+        }
+    };
+
     /**
      * 获取会话列表的数据：增加新朋友会话
      */
@@ -65,7 +88,9 @@ public class ConversationListFragment extends BaseFragment {
             for (BmobIMConversation item : list) {
                 switch (item.getConversationType()) {
                     case 1://私聊
-                        conversationList.add(new P2PConversation(new IMConversation(item)));
+                        if (item.getMessages() != null && item.getMessages().size() > 0) {
+                            conversationList.add(new P2PConversation(new IMConversation(item)));
+                        }
                         break;
                     default:
                         break;

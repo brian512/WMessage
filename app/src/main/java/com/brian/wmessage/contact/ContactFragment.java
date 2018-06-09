@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import com.brian.common.base.BaseFragment;
+import com.brian.common.utils.LogUtil;
 import com.brian.common.views.recyclerview.BaseRecyclerAdapter;
 import com.brian.wmessage.R;
 import com.brian.wmessage.bmob.BmobHelper;
 import com.brian.wmessage.chat.ChatActivity;
-import com.brian.wmessage.entity.Friend;
 import com.brian.wmessage.entity.IMConversation;
 import com.brian.wmessage.entity.UserInfo;
 
@@ -48,11 +48,10 @@ public class ContactFragment extends BaseFragment {
         mListAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
-                Friend friend = mListAdapter.getItem(position);
-                UserInfo user = friend.getFriendUser();
+                UserInfo user = mListAdapter.getItem(position);
                 BmobIMUserInfo info = new BmobIMUserInfo(user.getObjectId(), user.getUsername(), user.getAvatar());
                 BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
-                ChatActivity.startActivity(getContext(), new IMConversation(conversationEntrance));
+                ChatActivity.startActivity(getContext(), info, new IMConversation(conversationEntrance));
             }
         });
 
@@ -82,11 +81,15 @@ public class ContactFragment extends BaseFragment {
      * 查询本地会话
      */
     public void query() {
-        BmobHelper.getInstance().queryFriends(new FindListener<Friend>() {
+        BmobHelper.getInstance().queryUsers(" ", 20,
+                new FindListener<UserInfo>() {
                     @Override
-                    public void done(List<Friend> list, BmobException e) {
+                    public void done(List<UserInfo> list, BmobException e) {
                         if (e == null) {
                             mListAdapter.bindData(list);
+                        } else {
+                            mListAdapter.bindData(null);
+                            LogUtil.printError(e);
                         }
                     }
                 }

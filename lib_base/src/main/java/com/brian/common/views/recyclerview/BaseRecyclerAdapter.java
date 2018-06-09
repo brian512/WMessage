@@ -31,7 +31,9 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
 
     public void bindData(List<T> data) {
         mDataList.clear();
-        mDataList.addAll(data);
+        if (data != null) {
+            mDataList.addAll(data);
+        }
         notifyDataSetChanged();
     }
 
@@ -51,6 +53,22 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     public void add(int index, T item) {
         mDataList.add(index, item);
         notifyItemInserted(index);
+    }
+
+    public void addOrUpdate(int index, T item) {
+        int oldIndex = mDataList.indexOf(item);
+        if (oldIndex >= 0) {
+            if (oldIndex == index) {
+                update(item);
+            } else {
+                mDataList.remove(index);
+                mDataList.add(index, item);
+                notifyItemMoved(oldIndex, index);
+            }
+        } else {
+            mDataList.add(index, item);
+            notifyItemInserted(index);
+        }
     }
 
     public void update(T item) {

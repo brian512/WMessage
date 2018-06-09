@@ -61,7 +61,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".chat.ChatActivity"/>
+        <activity android:name=".chat.ChatActivity"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".login.RegisterActivity" />
         <activity android:name=".search.SearchUserActivity" />

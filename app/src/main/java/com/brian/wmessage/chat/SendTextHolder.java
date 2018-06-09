@@ -7,19 +7,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.brian.common.imageloader.ImageLoader;
 import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.R;
+import com.brian.wmessage.entity.UserInfo;
 
 import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
-import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMSendStatus;
 import cn.bmob.newim.bean.BmobIMUserInfo;
-import cn.bmob.newim.listener.MessageSendListener;
-import cn.bmob.v3.exception.BmobException;
 
 /**
  * 发送的文本类型
@@ -49,7 +46,7 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
         final BmobIMMessage message = (BmobIMMessage) o;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final BmobIMUserInfo info = message.getBmobIMUserInfo();
-        ImageLoader.get().showImage(iv_avatar, info != null ? info.getAvatar() : null, R.mipmap.default_head_2);
+        UserInfo.showHead(iv_avatar, info != null ? info.getAvatar() : "0");
         String time = dateFormat.format(message.getCreateTime());
         String content = message.getContent();
         tv_message.setText(content);

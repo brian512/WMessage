@@ -1,21 +1,24 @@
 package com.brian.wmessage.conversations;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.brian.common.imageloader.ImageLoader;
 import com.brian.common.views.recyclerview.BaseRecyclerAdapter;
 import com.brian.wmessage.R;
 import com.brian.wmessage.chat.ChatActivity;
 import com.brian.wmessage.entity.Conversation;
 import com.brian.wmessage.entity.P2PConversation;
+import com.brian.wmessage.entity.UserInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import cn.bmob.newim.bean.BmobIMMessage;
 
 /**
  * 会话列表适配
@@ -24,16 +27,21 @@ import java.util.Date;
 public class ConversationListAdapter extends BaseRecyclerAdapter<Conversation, ConversationListAdapter.ItemViewHolder> {
 
 
+    public void addOrUpdate(int index, Conversation c, BmobIMMessage message) {
+        for (Conversation conversation : mDataList) {
+            if (TextUtils.equals(conversation.getcId(), message.getConversationId())) {
+                ((P2PConversation)conversation).setLastMsg(message);
+                update(conversation);
+                return;
+            }
+        }
+        add(index, c);
+    }
+
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, final Conversation item, int position) {
-        Object obj = item.getAvatar();
-        if (obj instanceof String) {
-            String avatar = (String) obj;
-            ImageLoader.get().showImage(holder.headView, avatar, R.mipmap.default_head_2);
-        } else {
-            int defaultRes = (int) obj;
-            holder.headView.setImageResource(defaultRes);
-        }
+        String avatar = (String) item.getAvatar();
+        UserInfo.showHead(holder.headView, TextUtils.isEmpty(avatar) ? "0" : avatar);
         holder.nameView.setText(item.getcName());
         holder.msgView.setText(item.getLastMessageContent());
         holder.timeView.setText(getChatTime(false, item.getLastMessageTime()));

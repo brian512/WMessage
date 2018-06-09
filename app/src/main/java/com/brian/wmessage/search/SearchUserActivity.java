@@ -109,8 +109,6 @@ public class SearchUserActivity extends BaseActivity {
                         }
                     }
                 }
-
-
         );
     }
 

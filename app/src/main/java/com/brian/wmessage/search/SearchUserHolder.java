@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.brian.common.imageloader.ImageLoader;
 import com.brian.wmessage.R;
 import com.brian.wmessage.account.UserInfoActivity;
 import com.brian.wmessage.chat.BaseViewHolder;
@@ -35,7 +34,7 @@ public class SearchUserHolder extends BaseViewHolder {
     @Override
     public void bindData(Object o) {
         final UserInfo user = (UserInfo) o;
-        ImageLoader.get().showImage(avatar, user.getAvatar(), R.mipmap.default_head_2);
+        user.showHead(avatar);
         name.setText(user.getUsername());
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override

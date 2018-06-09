@@ -7,11 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.brian.common.imageloader.ImageLoader;
 import com.brian.common.views.recyclerview.BaseRecyclerAdapter;
 import com.brian.wmessage.R;
-import com.brian.wmessage.entity.Conversation;
-import com.brian.wmessage.entity.Friend;
 import com.brian.wmessage.entity.UserInfo;
 
 import java.text.SimpleDateFormat;
@@ -20,12 +17,11 @@ import java.util.Date;
 /**
  * @author huamm
  */
-public class ContactAdapter extends BaseRecyclerAdapter<Friend, ContactAdapter.ItemViewHolder> {
+public class ContactAdapter extends BaseRecyclerAdapter<UserInfo, ContactAdapter.ItemViewHolder> {
 
     @Override
-    public void onBindViewHolder(ItemViewHolder holder, Friend item, int position) {
-        UserInfo userInfo = item.getFriendUser();
-        ImageLoader.get().showImage(holder.headView, userInfo.getAvatar(), R.mipmap.default_head_2);
+    public void onBindViewHolder(ItemViewHolder holder, UserInfo userInfo, int position) {
+        userInfo.showHead(holder.headView);
         holder.nameView.setText(userInfo.getUsername());
     }
 

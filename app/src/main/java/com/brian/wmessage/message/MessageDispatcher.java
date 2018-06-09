@@ -2,6 +2,8 @@ package com.brian.wmessage.message;
 
 import java.util.ArrayList;
 
+import cn.bmob.newim.bean.BmobIMMessage;
+
 /**
  * 消息分发
  * @author huamm
@@ -22,16 +24,28 @@ public class MessageDispatcher {
     }
 
     public void registerListener(IMessageListener listener) {
-        mMessageListeners.add(listener);
+        synchronized (sInstance) {
+            mMessageListeners.add(listener);
+        }
     }
 
     public void unregisterListener(IMessageListener listener) {
-        mMessageListeners.remove(listener);
+        synchronized (sInstance) {
+            mMessageListeners.remove(listener);
+        }
+    }
+
+    public void dispatchMessage(BmobIMMessage message) {
+        synchronized (sInstance) {
+            for (IMessageListener listener : mMessageListeners) {
+                listener.onReceiveMessage(message);
+            }
+        }
     }
 
 
     public interface IMessageListener {
-
+        void onReceiveMessage(BmobIMMessage message);
     }
 
 

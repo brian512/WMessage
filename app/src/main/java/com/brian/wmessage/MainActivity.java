@@ -4,19 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.brian.common.base.BaseActivity;
 import com.brian.common.views.TitleBar;
 import com.brian.wmessage.bmob.BmobHelper;
-import com.brian.wmessage.conversations.ConversationListFragment;
 import com.brian.wmessage.login.LoginActivity;
-import com.brian.wmessage.search.SearchUserActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,22 +63,15 @@ public class MainActivity extends BaseActivity {
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
         mTabLayout.setupWithViewPager(mViewpager);
 
-        //设置小红点
-        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
-            View tabView = mTabAdapter.getTabView(this, i);
-            ImageView imageView = tabView.findViewById(R.id.iv_tab_red);
-
-            mTabLayout.getTabAt(i).setCustomView(tabView);
-        }
+//        //设置小红点
+//        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
+//            View tabView = mTabAdapter.getTabView(this, i);
+//            ImageView imageView = tabView.findViewById(R.id.iv_tab_red);
+//            mTabLayout.getTabAt(i).setCustomView(tabView);
+//        }
 
         mTitleBar.getLeftView().setVisibility(View.GONE);
-        mTitleBar.getRightView().setText("搜索");
-        mTitleBar.getRightView().setVisibility(View.VISIBLE);
-        mTitleBar.setRightListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SearchUserActivity.startActivity(getBaseContext());
-            }
-        });
+        mTitleBar.getRightView().setVisibility(View.GONE);
+        mTitleBar.setTitleResource(R.string.app_name);
     }
 }

@@ -1,7 +1,13 @@
 package com.brian.wmessage.chat;
 
 import com.brian.common.utils.LogUtil;
+import com.brian.wmessage.bmob.BmobHelper;
 import com.brian.wmessage.entity.IMConversation;
+import com.brian.wmessage.entity.IMMessage;
+import com.brian.wmessage.message.MessageDispatcher;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.bmob.newim.bean.BmobIMAudioMessage;
 import cn.bmob.newim.bean.BmobIMConversation;
@@ -61,7 +67,14 @@ public class MessageSendHelper {
 //        map.put("level", "1");
 //        msg.setExtraMap(map);
 //        msg.setExtra("OK");
-        sendMessage(conversation, msg);
+        sendMessage(conversation, new IMMessage(msg));
+        return msg;
+    }
+
+    public BmobIMTextMessage sendTextMessage(IMConversation conversation, String text, MessageSendListener listener) {
+        BmobIMTextMessage msg = new BmobIMTextMessage();
+        msg.setContent(text);
+        sendMessage(conversation, new IMMessage(msg), listener);
         return msg;
     }
 
@@ -70,7 +83,7 @@ public class MessageSendHelper {
      */
     public void sendVoiceMessage(IMConversation conversation, String local) {
         BmobIMAudioMessage audioMsg = new BmobIMAudioMessage(local);
-        sendMessage(conversation, audioMsg);
+        sendMessage(conversation, new IMMessage(audioMsg));
     }
 
     /**
@@ -78,7 +91,7 @@ public class MessageSendHelper {
      */
     public void sendImageMessage(IMConversation conversation, String local) {
         BmobIMImageMessage audioMsg = new BmobIMImageMessage(local);
-        sendMessage(conversation, audioMsg);
+        sendMessage(conversation, new IMMessage(audioMsg));
     }
 
     /**
@@ -86,7 +99,7 @@ public class MessageSendHelper {
      */
     public void sendVideoMessage(IMConversation conversation, String local) {
         BmobIMVideoMessage audioMsg = new BmobIMVideoMessage(local);
-        sendMessage(conversation, audioMsg);
+        sendMessage(conversation, new IMMessage(audioMsg));
     }
 
     /**
@@ -94,12 +107,25 @@ public class MessageSendHelper {
      */
     public void sendVideoMessage(IMConversation conversation, String address, double latitude, double longitude) {
         BmobIMLocationMessage audioMsg = new BmobIMLocationMessage(address, latitude, longitude);
-        sendMessage(conversation, audioMsg);
+        sendMessage(conversation, new IMMessage(audioMsg));
     }
 
-    private void sendMessage(IMConversation conversation, BmobIMMessage message) {
+    private void sendMessage(IMConversation conversation, IMMessage message) {
+        sendMessage(conversation, message, mMessageSendListener);
+    }
+
+    public void sendMessage(IMConversation conversation, IMMessage message, MessageSendListener listener) {
         BmobIMConversation conversationManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversation.getConversation());
-        conversationManager.sendMessage(message, mMessageSendListener);
+        //可随意设置额外信息
+        Map<String, Object> map = message.getExtraMap();
+        if (map == null) {
+            map = new HashMap<>();
+        }
+        map.put("my_avatar", BmobHelper.getInstance().getCurrentUser().getAvatar());
+        map.put("my_name", BmobHelper.getInstance().getCurrentUser().getUsername());
+        message.mMessage.setExtraMap(map);
+        conversationManager.sendMessage(message.mMessage, listener);
+        MessageDispatcher.getInstance().dispatchMessage(message.mMessage);
     }
 
 }

@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cn.bmob.newim.bean.BmobIMMessage;
@@ -38,9 +37,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /**
      * 显示时间间隔:10分钟
      */
-    private final long TIME_INTERVAL = 10 * 60 * 1000;
+    private static final long TIME_INTERVAL = 10 * 60 * 1000;
 
-    private List<BmobIMMessage> msgs = new ArrayList<>();
+    private List<BmobIMMessage> mMessageList = new ArrayList<>();
 
     private String currentUid = "";
 
@@ -77,17 +76,22 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public int getCount() {
-        return this.msgs == null ? 0 : this.msgs.size();
+        return this.mMessageList == null ? 0 : this.mMessageList.size();
     }
 
     public void addMessages(List<BmobIMMessage> messages) {
-        msgs.addAll(0, messages);
-        notifyDataSetChanged();
+        mMessageList.addAll(0, messages);
+        notifyItemRangeInserted(0, messages.size());
     }
 
     public void addMessage(BmobIMMessage message) {
-        msgs.addAll(Arrays.asList(message));
-        notifyDataSetChanged();
+        mMessageList.add(message);
+        notifyItemInserted(mMessageList.size()-1);
+    }
+
+    public void updateMessage(BmobIMMessage message) {
+        int index = mMessageList.indexOf(message);
+        notifyItemChanged(index);
     }
 
     /**
@@ -97,7 +101,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @return
      */
     public BmobIMMessage getItem(int position) {
-        return this.msgs == null ? null : (position >= this.msgs.size() ? null : this.msgs.get(position));
+        return this.mMessageList == null ? null : (position >= this.mMessageList.size() ? null : this.mMessageList.get(position));
     }
 
     /**
@@ -106,13 +110,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @param position
      */
     public void remove(int position) {
-        msgs.remove(position);
+        mMessageList.remove(position);
         notifyDataSetChanged();
     }
 
     public BmobIMMessage getFirstMessage() {
-        if (null != msgs && msgs.size() > 0) {
-            return msgs.get(0);
+        if (null != mMessageList && mMessageList.size() > 0) {
+            return mMessageList.get(0);
         } else {
             return null;
         }
@@ -149,7 +153,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((BaseViewHolder) holder).bindData(msgs.get(position));
+        ((BaseViewHolder) holder).bindData(mMessageList.get(position));
         if (holder instanceof ReceiveTextHolder) {
             ((ReceiveTextHolder) holder).showTime(shouldShowTime(position));
 //        } else if (holder instanceof ReceiveImageHolder) {
@@ -177,7 +181,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        BmobIMMessage message = msgs.get(position);
+        BmobIMMessage message = mMessageList.get(position);
         if (message.getMsgType().equals(BmobIMMessageType.IMAGE.getType())) {
             return message.getFromId().equals(currentUid) ? TYPE_SEND_IMAGE : TYPE_RECEIVER_IMAGE;
         } else if (message.getMsgType().equals(BmobIMMessageType.LOCATION.getType())) {
@@ -197,7 +201,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return msgs.size();
+        return mMessageList.size();
     }
 
     private OnRecyclerViewListener onRecyclerViewListener;
@@ -210,8 +214,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (position == 0) {
             return true;
         }
-        long lastTime = msgs.get(position - 1).getCreateTime();
-        long curTime = msgs.get(position).getCreateTime();
+        long lastTime = mMessageList.get(position - 1).getCreateTime();
+        long curTime = mMessageList.get(position).getCreateTime();
         return curTime - lastTime > TIME_INTERVAL;
     }
 }

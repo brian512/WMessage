@@ -21,6 +21,7 @@
         android:layout_toEndOf="@+id/tv_tab_title"
         android:layout_alignTop="@+id/tv_tab_title"
         android:layout_margin="2dp"
-        android:src="@mipmap/msg_tips"/>
+        android:src="@mipmap/msg_tips"
+        android:visibility="gone"/>
 
 </RelativeLayout>

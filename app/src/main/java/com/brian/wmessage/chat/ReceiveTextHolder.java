@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.brian.common.imageloader.ImageLoader;
 import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.R;
+import com.brian.wmessage.entity.UserInfo;
 
 import java.text.SimpleDateFormat;
 
@@ -48,7 +48,7 @@ public class ReceiveTextHolder extends BaseViewHolder {
         String time = dateFormat.format(message.getCreateTime());
         tv_time.setText(time);
         final BmobIMUserInfo info = message.getBmobIMUserInfo();
-        ImageLoader.get().showImage(iv_avatar, info != null ? info.getAvatar() : null, R.mipmap.default_head_2);
+        UserInfo.showHead(iv_avatar, info != null ? info.getAvatar() : "0");
         String content = message.getContent();
         tv_message.setText(content);
         iv_avatar.setOnClickListener(new View.OnClickListener() {

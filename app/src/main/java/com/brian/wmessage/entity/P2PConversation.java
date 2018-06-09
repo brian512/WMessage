@@ -3,7 +3,9 @@ package com.brian.wmessage.entity;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.R;
+import com.brian.wmessage.bmob.BmobHelper;
 import com.brian.wmessage.chat.ChatActivity;
 
 import java.util.List;
@@ -38,6 +40,12 @@ public class P2PConversation extends Conversation {
         }
     }
 
+    public void setLastMsg(BmobIMMessage message) {
+        if (message != null) {
+            lastMsg = message;
+        }
+    }
+
     public IMConversation getConversation() {
         return mConversation;
     }
@@ -50,12 +58,15 @@ public class P2PConversation extends Conversation {
     @Override
     public Object getAvatar() {
         if (cType == BmobIMConversationType.PRIVATE) {
-            String avatar = mConversation.getConversation().getConversationIcon();
-            if (TextUtils.isEmpty(avatar)) {//头像为空，使用默认头像
-                return R.mipmap.default_head_1;
+            String avatar = "";
+            BmobIMMessage lastMessage = mConversation.getConversation().getMessages().get(0);
+            if (!BmobHelper.getInstance().isMySelef(lastMessage.getBmobIMUserInfo().getUserId())) {
+                avatar = lastMessage.getBmobIMUserInfo().getAvatar();
             } else {
-                return avatar;
+                avatar = mConversation.getConversation().getConversationIcon();
             }
+            LogUtil.d("avatar=" + avatar);
+            return avatar;
         } else {
             return R.mipmap.default_head_0;
         }

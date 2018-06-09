@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brian.common.base.BaseActivity;
-import com.brian.common.imageloader.ImageLoader;
 import com.brian.common.utils.ToastUtil;
 import com.brian.wmessage.R;
 import com.brian.wmessage.chat.ChatActivity;
@@ -67,7 +66,7 @@ public class UserInfoActivity extends BaseActivity {
         //构造聊天方的用户信息:传入用户id、用户名和用户头像三个参数
         info = new BmobIMUserInfo(mUserInfo.getObjectId(), mUserInfo.getUsername(), mUserInfo.getAvatar());
         //加载头像
-        ImageLoader.get().showImage(iv_avator, mUserInfo.getAvatar(), R.mipmap.default_head_2);
+        mUserInfo.showHead(iv_avator);
         //显示名称
         tv_name.setText(mUserInfo.getUsername());
 
