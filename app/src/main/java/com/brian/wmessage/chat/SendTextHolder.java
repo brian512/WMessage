@@ -25,20 +25,20 @@ import cn.bmob.newim.bean.BmobIMUserInfo;
 public class SendTextHolder extends BaseViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
     @BindView(R.id.iv_avatar)
-    protected ImageView iv_avatar;
+    protected ImageView mAvatarIv;
     @BindView(R.id.iv_fail_resend)
-    protected ImageView iv_fail_resend;
+    protected ImageView mResendIv;
     @BindView(R.id.tv_time)
-    protected TextView tv_time;
+    protected TextView mTimeTv;
     @BindView(R.id.tv_message)
-    protected TextView tv_message;
+    protected TextView mMessageTv;
     @BindView(R.id.tv_send_status)
-    protected TextView tv_send_status;
+    protected TextView mSendStatusTv;
     @BindView(R.id.progress_load)
-    protected ProgressBar progress_load;
+    protected ProgressBar mSendProgressBar;
 
     public SendTextHolder(Context context, ViewGroup root, OnRecyclerViewListener listener) {
-        super(context, root, R.layout.item_chat_sent_message, listener);
+        super(context, root, R.layout.chat_sent_message_item, listener);
     }
 
     @Override
@@ -46,25 +46,25 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
         final BmobIMMessage message = (BmobIMMessage) o;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final BmobIMUserInfo info = message.getBmobIMUserInfo();
-        UserInfo.showHead(iv_avatar, info != null ? info.getAvatar() : "0");
+        UserInfo.showHead(mAvatarIv, info != null ? info.getAvatar() : "0");
         String time = dateFormat.format(message.getCreateTime());
         String content = message.getContent();
-        tv_message.setText(content);
-        tv_time.setText(time);
+        mMessageTv.setText(content);
+        mTimeTv.setText(time);
 
         int status = message.getSendStatus();
         if (status == BmobIMSendStatus.SEND_FAILED.getStatus()) {
-            iv_fail_resend.setVisibility(View.VISIBLE);
-            progress_load.setVisibility(View.GONE);
+            mResendIv.setVisibility(View.VISIBLE);
+            mSendProgressBar.setVisibility(View.GONE);
         } else if (status == BmobIMSendStatus.SENDING.getStatus()) {
-            iv_fail_resend.setVisibility(View.GONE);
-            progress_load.setVisibility(View.VISIBLE);
+            mResendIv.setVisibility(View.GONE);
+            mSendProgressBar.setVisibility(View.VISIBLE);
         } else {
-            iv_fail_resend.setVisibility(View.GONE);
-            progress_load.setVisibility(View.GONE);
+            mResendIv.setVisibility(View.GONE);
+            mSendProgressBar.setVisibility(View.GONE);
         }
 
-        tv_message.setOnClickListener(new View.OnClickListener() {
+        mMessageTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LogUtil.d("点击" + message.getContent());
@@ -74,7 +74,7 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
             }
         });
 
-        tv_message.setOnLongClickListener(new View.OnLongClickListener() {
+        mMessageTv.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (onRecyclerViewListener != null) {
@@ -84,7 +84,7 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
             }
         });
 
-        iv_avatar.setOnClickListener(new View.OnClickListener() {
+        mAvatarIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LogUtil.d("点击" + info.getName() + "的头像");
@@ -92,28 +92,28 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
         });
 
         //重发
-        iv_fail_resend.setOnClickListener(new View.OnClickListener() {
+        mResendIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                c.resendMessage(message, new MessageSendListener() {
 //                    @Override
 //                    public void onStart(BmobIMMessage msg) {
-//                        progress_load.setVisibility(View.VISIBLE);
-//                        iv_fail_resend.setVisibility(View.GONE);
-//                        tv_send_status.setVisibility(View.INVISIBLE);
+//                        mSendProgressBar.setVisibility(View.VISIBLE);
+//                        mResendIv.setVisibility(View.GONE);
+//                        mSendStatusTv.setVisibility(View.INVISIBLE);
 //                    }
 //
 //                    @Override
 //                    public void done(BmobIMMessage msg, BmobException e) {
 //                        if (e == null) {
-//                            tv_send_status.setVisibility(View.VISIBLE);
-//                            tv_send_status.setText("已发送");
-//                            iv_fail_resend.setVisibility(View.GONE);
-//                            progress_load.setVisibility(View.GONE);
+//                            mSendStatusTv.setVisibility(View.VISIBLE);
+//                            mSendStatusTv.setText("已发送");
+//                            mResendIv.setVisibility(View.GONE);
+//                            mSendProgressBar.setVisibility(View.GONE);
 //                        } else {
-//                            iv_fail_resend.setVisibility(View.VISIBLE);
-//                            progress_load.setVisibility(View.GONE);
-//                            tv_send_status.setVisibility(View.INVISIBLE);
+//                            mResendIv.setVisibility(View.VISIBLE);
+//                            mSendProgressBar.setVisibility(View.GONE);
+//                            mSendStatusTv.setVisibility(View.INVISIBLE);
 //                        }
 //                    }
 //                });
@@ -122,6 +122,6 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
     }
 
     public void showTime(boolean isShow) {
-        tv_time.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        mTimeTv.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 }

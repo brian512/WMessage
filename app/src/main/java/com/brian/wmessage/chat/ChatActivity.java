@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.brian.common.base.BaseActivity;
 import com.brian.common.utils.DipPixelUtil;
 import com.brian.common.utils.LogUtil;
+import com.brian.common.utils.TextDrawableUtil;
 import com.brian.common.utils.ToastUtil;
 import com.brian.common.views.TitleBar;
 import com.brian.common.views.recyclerview.RecyclerViewUtil;
@@ -46,7 +47,7 @@ public class ChatActivity extends BaseActivity {
     private static final String EXTRA_USERINFO = "user_info";
 
     @BindView(R.id.ll_chat)
-    LinearLayout ll_chat;
+    LinearLayout mRootLy;
 
     @BindView(R.id.sw_refresh)
     SwipeRefreshLayout mRefreshLayout;
@@ -58,9 +59,9 @@ public class ChatActivity extends BaseActivity {
     TitleBar mTitleBar;
 
     @BindView(R.id.edit_msg)
-    EditText edit_msg;
+    EditText mMessageEt;
     @BindView(R.id.btn_chat_send)
-    TextView btn_chat_send;
+    TextView mSendBtn;
 
     private ChatAdapter mChatAdapter;
 
@@ -92,17 +93,48 @@ public class ChatActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.chat_activity);
         ButterKnife.bind(this);
 
         mConversation = (IMConversation) getIntent().getSerializableExtra(EXTRA_CONVERSATION);
         mUserInfo = (BmobIMUserInfo) getIntent().getSerializableExtra(EXTRA_USERINFO);
 
+        initUI();
+        initListeners();
+
+        queryMessages(true);
+    }
+
+    private void initUI() {
         mRefreshLayout.setEnabled(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mChatAdapter = new ChatAdapter();
         mRecyclerView.setAdapter(mChatAdapter);
+
+        TextDrawableUtil.setLeftDrawable(mTitleBar.getLeftView(), R.drawable.ic_back);
+        mTitleBar.setTitle(mConversation.getConversation().getConversationTitle());
+        mTitleBar.getLeftView().setVisibility(View.VISIBLE);
+    }
+
+    private void initListeners() {
+        mTitleBar.getLeftView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        mSendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!BmobHelper.getInstance().checkOnlineState()) {
+                    ToastUtil.showMsg("尚未连接IM服务器");
+                    return;
+                }
+                sendMessage();
+            }
+        });
 
         mRefreshLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -134,24 +166,6 @@ public class ChatActivity extends BaseActivity {
                 queryMessages(false);
             }
         });
-
-        mTitleBar.getLeftView().setVisibility(View.GONE);
-        mTitleBar.setTitle(mConversation.getConversation().getConversationTitle());
-
-
-        btn_chat_send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!BmobHelper.getInstance().checkOnlineState()) {
-                    ToastUtil.showMsg("尚未连接IM服务器");
-                    return;
-                }
-                sendMessage();
-            }
-        });
-
-        queryMessages(true);
-
     }
 
     @Override
@@ -208,7 +222,7 @@ public class ChatActivity extends BaseActivity {
      * 发送文本消息
      */
     private void sendMessage() {
-        String text = edit_msg.getText().toString();
+        String text = mMessageEt.getText().toString();
         if (TextUtils.isEmpty(text.trim())) {
             ToastUtil.showMsg("请输入内容");
             return;
@@ -230,7 +244,7 @@ public class ChatActivity extends BaseActivity {
             }
         };
         MessageSendHelper.getInstance().sendTextMessage(mConversation, text, listener);
-        edit_msg.setText("");
+        mMessageEt.setText("");
     }
 
     /**

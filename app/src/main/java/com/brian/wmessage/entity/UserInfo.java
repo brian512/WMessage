@@ -3,8 +3,11 @@ package com.brian.wmessage.entity;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.brian.common.tools.Env;
+import com.brian.common.utils.Md5Util;
 import com.brian.wmessage.R;
 
+import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.v3.BmobUser;
 
 /**
@@ -21,6 +24,8 @@ public class UserInfo extends BmobUser {
             R.mipmap.default_head_5,
     };
 
+    private BmobIMUserInfo mBmobIMUserInfo;
+
     private String avatar;
 
     public String getUserId() {
@@ -33,6 +38,14 @@ public class UserInfo extends BmobUser {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public BmobIMUserInfo getBmobIMUserInfo() {
+        return mBmobIMUserInfo;
+    }
+
+    public void setBmobIMUserInfo(BmobIMUserInfo bmobIMUserInfo) {
+        mBmobIMUserInfo = bmobIMUserInfo;
     }
 
     public void showHead(ImageView headView) {
@@ -51,5 +64,9 @@ public class UserInfo extends BmobUser {
             }
         }
         headView.setImageResource(DEFAULT_HEADS[index%DEFAULT_HEADS.length]);
+    }
+
+    public static String encryptPassword(String originPassword) {
+        return Md5Util.getMD5(Env.getPackageName() + originPassword); // 密码与包名绑定
     }
 }

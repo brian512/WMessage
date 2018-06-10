@@ -45,7 +45,7 @@ public class ConversationListFragment extends BaseFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootLy = inflater.inflate(R.layout.list_fragment, null);
+        View rootLy = inflater.inflate(R.layout.list_fragment_layout, null);
         mRecyclerView = rootLy.findViewById(R.id.recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mListAdapter = new ConversationListAdapter();

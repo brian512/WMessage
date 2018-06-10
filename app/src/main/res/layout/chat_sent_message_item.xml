@@ -18,14 +18,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginTop="11dp">
 
         <ImageView
             android:id="@+id/iv_avatar"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:scaleType="fitXY"
             android:src="@mipmap/default_head_1" />
@@ -34,17 +34,17 @@
             android:id="@+id/tv_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@id/iv_avatar"
+            android:layout_marginEnd="5dp"
+            android:layout_toStartOf="@id/iv_avatar"
             android:background="@drawable/chat_right_qp"
-            android:gravity="left|center"
+            android:gravity="start|center"
             android:lineSpacingExtra="3dp"
             android:maxWidth="225.0dip"
             android:minHeight="40dp"
             android:minWidth="80dp"
             android:paddingBottom="8dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="30dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="30dp"
             android:paddingTop="8dp"
             android:textColor="@color/com_text_white" />
 
@@ -53,9 +53,8 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/tv_message"
-            android:clickable="true"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/tv_message"
             android:scaleType="fitCenter"
             android:src="@drawable/btn_chat_fail_resend"
             android:visibility="invisible" />
@@ -65,8 +64,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/tv_message"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/tv_message"
             android:textColor="#818181"
             android:textSize="12sp"
             android:visibility="invisible" />
@@ -76,8 +75,8 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/tv_message"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/tv_message"
             android:visibility="visible" />
     </RelativeLayout>
 

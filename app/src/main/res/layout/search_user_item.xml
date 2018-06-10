@@ -16,7 +16,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="11dp"
+            android:layout_marginStart="11dp"
             android:scaleType="fitXY"
             android:src="@mipmap/default_head_1" />
 
@@ -25,8 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="18dp"
-            android:layout_toRightOf="@id/avatar"
+            android:layout_marginStart="18dp"
+            android:layout_toEndOf="@id/avatar"
             android:textColor="#0F0F0F"
             android:textSize="16sp" />
 
@@ -34,9 +34,9 @@
             android:id="@+id/btn_add"
             android:layout_width="80dp"
             android:layout_height="36dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="11dp"
+            android:layout_marginEnd="11dp"
             android:background="@drawable/btn_login_selector"
             android:text="查看"
             android:textColor="@color/com_text_white"

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 
 import com.brian.common.base.BaseActivity;
 import com.brian.common.views.TitleBar;
@@ -16,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ * 主页面，由viewpager的三个tab组成
  * @author huamm
  */
 public class MainActivity extends BaseActivity {
@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.homepage_activity);
         ButterKnife.bind(this);
 
         initView();
@@ -67,11 +67,10 @@ public class MainActivity extends BaseActivity {
 //        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
 //            View tabView = mTabAdapter.getTabView(this, i);
 //            ImageView imageView = tabView.findViewById(R.id.iv_tab_red);
+//            imageView.setVisibility(View.GONE);
 //            mTabLayout.getTabAt(i).setCustomView(tabView);
 //        }
 
-        mTitleBar.getLeftView().setVisibility(View.GONE);
-        mTitleBar.getRightView().setVisibility(View.GONE);
         mTitleBar.setTitleResource(R.string.app_name);
     }
 }

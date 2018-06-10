@@ -13,26 +13,25 @@ import java.util.List;
 /**
  * @author huamm
  */
-public class SearchUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class SearchUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<UserInfo> users = new ArrayList<>();
+    private List<UserInfo> mUserInfoList = new ArrayList<>();
 
     public SearchUserAdapter() {
     }
 
     public void setDatas(List<UserInfo> list) {
-        users.clear();
+        mUserInfoList.clear();
         if (null != list) {
-            users.addAll(list);
+            mUserInfoList.addAll(list);
         }
     }
 
-    /**获取用户
-     * @param position
-     * @return
+    /**
+     * 获取用户
      */
     public UserInfo getItem(int position){
-        return users.get(position);
+        return mUserInfoList.get(position);
     }
 
     private OnRecyclerViewListener onRecyclerViewListener;
@@ -48,7 +47,7 @@ public class SearchUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((BaseViewHolder)holder).bindData(users.get(position));
+        ((BaseViewHolder)holder).bindData(mUserInfoList.get(position));
     }
 
     @Override
@@ -58,6 +57,6 @@ public class SearchUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return mUserInfoList.size();
     }
 }

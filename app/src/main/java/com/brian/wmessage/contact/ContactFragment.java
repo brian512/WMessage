@@ -39,7 +39,7 @@ public class ContactFragment extends BaseFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootLy = inflater.inflate(R.layout.list_fragment, null);
+        final View rootLy = inflater.inflate(R.layout.list_fragment_layout, null);
         mRecyclerView = rootLy.findViewById(R.id.recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mListAdapter = new ContactAdapter();
@@ -64,18 +64,6 @@ public class ContactFragment extends BaseFragment {
         });
         return rootLy;
     }
-//
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        EventBus.getDefault().register(this);
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        EventBus.getDefault().unregister(this);
-//        super.onStop();
-//    }
 
     /**
      * 查询本地会话

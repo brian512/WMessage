@@ -23,7 +23,7 @@ import cn.bmob.v3.BmobUser;
  */
 public class SetFragment extends BaseFragment {
 
-    @BindView(R.id.iv_avator)
+    @BindView(R.id.iv_avatar)
     ImageView mHeadView;
     @BindView(R.id.tv_name)
     TextView mNameView;

@@ -65,7 +65,7 @@ public class P2PConversation extends Conversation {
             } else {
                 avatar = mConversation.getConversation().getConversationIcon();
             }
-            LogUtil.d("avatar=" + avatar);
+            LogUtil.d("mAvatarIv=" + avatar);
             return avatar;
         } else {
             return R.mipmap.default_head_0;

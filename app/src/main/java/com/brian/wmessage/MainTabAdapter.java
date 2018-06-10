@@ -75,7 +75,7 @@ public class MainTabAdapter extends FragmentPagerAdapter {
 
 
     public View getTabView(Context context, int position) {
-        View tabView = LayoutInflater.from(context).inflate(R.layout.item_tab_layout, null);
+        View tabView = LayoutInflater.from(context).inflate(R.layout.homepage_tab_item, null);
         TextView tabTitle = tabView.findViewById(R.id.tv_tab_title);
         tabTitle.setText(mTabTitles[position]);
         return tabView;

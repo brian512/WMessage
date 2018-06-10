@@ -19,13 +19,13 @@ import cn.bmob.newim.bean.BmobIMMessage;
 public class AgreeHolder extends BaseViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
     @BindView(R.id.tv_time)
-    protected TextView tv_time;
+    protected TextView mTimeTv;
 
     @BindView(R.id.tv_message)
-    protected TextView tv_message;
+    protected TextView mMessageTv;
 
     public AgreeHolder(Context context, ViewGroup root, OnRecyclerViewListener listener) {
-        super(context, root, R.layout.item_chat_agree, listener);
+        super(context, root, R.layout.chat_agree_item, listener);
     }
 
     @Override
@@ -34,11 +34,11 @@ public class AgreeHolder extends BaseViewHolder implements View.OnClickListener,
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String time = dateFormat.format(message.getCreateTime());
         String content = message.getContent();
-        tv_message.setText(content);
-        tv_time.setText(time);
+        mMessageTv.setText(content);
+        mTimeTv.setText(time);
     }
 
     public void showTime(boolean isShow) {
-        tv_time.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        mTimeTv.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 }

@@ -60,16 +60,16 @@ public class BmobHelper {
         if (user == null) {
             return false;
         }
-        //TODO 连接：3.1、登录成功、注册成功或处于登录状态重新打开应用后执行连接IM服务器的操作
-        //判断用户是否登录，并且连接状态不是已连接，则进行连接操作
+        // 登录成功、注册成功或处于登录状态重新打开应用后执行连接IM服务器的操作
+        // 判断用户是否登录，并且连接状态不是已连接，则进行连接操作
         if (!TextUtils.isEmpty(user.getUserId()) &&
                 BmobIM.getInstance().getCurrentStatus().getCode() != ConnectionStatus.CONNECTED.getCode()) {
             BmobIM.connect(user.getUserId(), new ConnectListener() {
                 @Override
                 public void done(String uid, BmobException e) {
                     if (e == null) {
-                        //服务器连接成功就发送一个更新事件，同步更新会话及主页的小红点
-                        //TODO 会话：2.7、更新用户资料，用于在会话页面、聊天页面以及个人信息页面显示
+                        // 服务器连接成功就发送一个更新事件，同步更新会话及主页的小红点
+                        // 更新用户资料，用于在会话页面、聊天页面以及个人信息页面显示
                         BmobIM.getInstance().
                                 updateUserInfo(new BmobIMUserInfo(user.getObjectId(),
                                         user.getUsername(), user.getAvatar()));
@@ -79,7 +79,7 @@ public class BmobHelper {
                     }
                 }
             });
-            //TODO 连接：3.3、监听连接状态，可通过BmobIM.getInstance().getCurrentStatus()来获取当前的长连接状态
+            // 监听连接状态，可通过BmobIM.getInstance().getCurrentStatus()来获取当前的长连接状态
             BmobIM.getInstance().setOnConnectStatusChangeListener(new ConnectStatusChangeListener() {
                 @Override
                 public void onChange(ConnectionStatus status) {
@@ -94,7 +94,6 @@ public class BmobHelper {
     /**
      * 查询好友
      */
-    //TODO 好友管理：9.2、查询好友
     public void queryFriends(final FindListener<Friend> listener) {
         BmobQuery<Friend> query = new BmobQuery<>();
         UserInfo user = BmobUser.getCurrentUser(UserInfo.class);
@@ -130,14 +129,6 @@ public class BmobHelper {
      * 登录
      */
     public void login(String username, String password, final LogInListener listener) {
-        if (TextUtils.isEmpty(username)) {
-            listener.done(null, new BmobException(CODE_ERROR_EMPTY, "请填写用户名"));
-            return;
-        }
-        if (TextUtils.isEmpty(password)) {
-            listener.done(null, new BmobException(CODE_ERROR_EMPTY, "请填写密码"));
-            return;
-        }
         final UserInfo user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
@@ -156,23 +147,7 @@ public class BmobHelper {
     /**
      * 注册
      */
-    public void register(String username, String password, String pwdagain, final LogInListener listener) {
-        if (TextUtils.isEmpty(username)) {
-            listener.done(null, new BmobException(CODE_ERROR_EMPTY, "请填写用户名"));
-            return;
-        }
-        if (TextUtils.isEmpty(password)) {
-            listener.done(null, new BmobException(CODE_ERROR_EMPTY, "请填写密码"));
-            return;
-        }
-        if (TextUtils.isEmpty(pwdagain)) {
-            listener.done(null, new BmobException(CODE_ERROR_EMPTY, "请填写确认密码"));
-            return;
-        }
-        if (!password.equals(pwdagain)) {
-            listener.done(null, new BmobException(CODE_ERROR_MATCH, "两次输入的密码不一致，请重新输入"));
-            return;
-        }
+    public void register(String username, String password, final LogInListener listener) {
         final UserInfo user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);

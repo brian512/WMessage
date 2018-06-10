@@ -13,7 +13,6 @@ import com.brian.wmessage.entity.UserInfo;
 import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMUserInfo;
 
@@ -24,21 +23,16 @@ import cn.bmob.newim.bean.BmobIMUserInfo;
 public class ReceiveTextHolder extends BaseViewHolder {
 
     @BindView(R.id.iv_avatar)
-    ImageView iv_avatar;
+    ImageView mAvatarIv;
 
     @BindView(R.id.tv_time)
-    TextView tv_time;
+    TextView mTimeTv;
 
     @BindView(R.id.tv_message)
-    TextView tv_message;
+    TextView mMessageTv;
 
     public ReceiveTextHolder(Context context, ViewGroup root, OnRecyclerViewListener onRecyclerViewListener) {
-        super(context, root, R.layout.item_chat_received_message, onRecyclerViewListener);
-    }
-
-    @OnClick({R.id.iv_avatar})
-    public void onAvatarClick(View view) {
-
+        super(context, root, R.layout.chat_received_message_item, onRecyclerViewListener);
     }
 
     @Override
@@ -46,12 +40,12 @@ public class ReceiveTextHolder extends BaseViewHolder {
         final BmobIMMessage message = (BmobIMMessage) o;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
         String time = dateFormat.format(message.getCreateTime());
-        tv_time.setText(time);
+        mTimeTv.setText(time);
         final BmobIMUserInfo info = message.getBmobIMUserInfo();
-        UserInfo.showHead(iv_avatar, info != null ? info.getAvatar() : "0");
+        UserInfo.showHead(mAvatarIv, info != null ? info.getAvatar() : "0");
         String content = message.getContent();
-        tv_message.setText(content);
-        iv_avatar.setOnClickListener(new View.OnClickListener() {
+        mMessageTv.setText(content);
+        mAvatarIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (info == null) {
@@ -61,7 +55,7 @@ public class ReceiveTextHolder extends BaseViewHolder {
                 LogUtil.d("点击" + info.getName() + "的头像");
             }
         });
-        tv_message.setOnClickListener(new View.OnClickListener() {
+        mMessageTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LogUtil.d("点击" + message.getContent());
@@ -71,7 +65,7 @@ public class ReceiveTextHolder extends BaseViewHolder {
             }
         });
 
-        tv_message.setOnLongClickListener(new View.OnLongClickListener() {
+        mMessageTv.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (onRecyclerViewListener != null) {
@@ -83,6 +77,6 @@ public class ReceiveTextHolder extends BaseViewHolder {
     }
 
     public void showTime(boolean isShow) {
-        tv_time.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        mTimeTv.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 }

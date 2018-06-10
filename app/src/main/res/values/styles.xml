@@ -6,6 +6,18 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/Animation</item>
+    </style>
+
+    <style name="ActivityTheme" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/Animation</item>
+    </style>
+
+    <style name="Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/translate_between_interface_right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/translate_between_interface_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/translate_between_interface_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/translate_between_interface_right_out</item>
     </style>
 
     <style name="TabLayoutTextAppearance" parent="TextAppearance.Design.Tab">

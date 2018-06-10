@@ -43,7 +43,7 @@ public class ConversationListAdapter extends BaseRecyclerAdapter<Conversation, C
         String avatar = (String) item.getAvatar();
         UserInfo.showHead(holder.headView, TextUtils.isEmpty(avatar) ? "0" : avatar);
         holder.nameView.setText(item.getcName());
-        holder.msgView.setText(item.getLastMessageContent());
+        holder.msgView.setText(item.getLastMessageContent().replace("\n", " "));
         holder.timeView.setText(getChatTime(false, item.getLastMessageTime()));
         int unreadCnt = item.getUnReadCount();
         if (unreadCnt > 0) {
@@ -68,7 +68,7 @@ public class ConversationListAdapter extends BaseRecyclerAdapter<Conversation, C
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recentlist, null);
+        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.conversatio_list_item, null);
         return new ItemViewHolder(layout);
     }
 

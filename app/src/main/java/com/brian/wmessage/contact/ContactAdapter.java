@@ -27,7 +27,7 @@ public class ContactAdapter extends BaseRecyclerAdapter<UserInfo, ContactAdapter
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_contact, null);
+        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_item, null);
         return new ItemViewHolder(layout);
     }
 

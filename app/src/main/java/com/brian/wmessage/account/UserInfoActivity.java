@@ -1,5 +1,6 @@
 package com.brian.wmessage.account;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,22 +32,22 @@ public class UserInfoActivity extends BaseActivity {
 
     private static final String EXTRA_USERINFO = "userinfo";
 
-    @BindView(R.id.iv_avator)
-    ImageView iv_avator;
+    @BindView(R.id.iv_avatar)
+    ImageView mUserAvatar;
     @BindView(R.id.tv_name)
-    TextView tv_name;
+    TextView mUserNameTv;
     @BindView(R.id.btn_chat)
-    Button btn_chat;
-
+    Button mChatBtn;
 
     //用户
     private UserInfo mUserInfo;
-    //用户信息
-    private BmobIMUserInfo info;
 
     public static void startActivity(Context context, UserInfo userInfo) {
         Intent intent = new Intent(context, UserInfoActivity.class);
         intent.putExtra(EXTRA_USERINFO, userInfo);
+        if (!(context instanceof Activity)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         context.startActivity(intent);
     }
 
@@ -54,23 +55,24 @@ public class UserInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_info);
+        setContentView(R.layout.profile_activity);
         ButterKnife.bind(this);
         //用户
         mUserInfo = (UserInfo) getIntent().getSerializableExtra(EXTRA_USERINFO);
         if (mUserInfo.getObjectId().equals(BmobUser.getCurrentUser(UserInfo.class).getObjectId())) {//用户为登录用户
-            btn_chat.setVisibility(View.GONE);
+            mChatBtn.setVisibility(View.GONE);
         } else {//用户为非登录用户
-            btn_chat.setVisibility(View.VISIBLE);
+            mChatBtn.setVisibility(View.VISIBLE);
         }
         //构造聊天方的用户信息:传入用户id、用户名和用户头像三个参数
-        info = new BmobIMUserInfo(mUserInfo.getObjectId(), mUserInfo.getUsername(), mUserInfo.getAvatar());
+        BmobIMUserInfo info = new BmobIMUserInfo(mUserInfo.getObjectId(), mUserInfo.getUsername(), mUserInfo.getAvatar());
+        mUserInfo.setBmobIMUserInfo(info);
         //加载头像
-        mUserInfo.showHead(iv_avator);
+        mUserInfo.showHead(mUserAvatar);
         //显示名称
-        tv_name.setText(mUserInfo.getUsername());
+        mUserNameTv.setText(mUserInfo.getUsername());
 
-        btn_chat.setOnClickListener(new View.OnClickListener() {
+        mChatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chat();
@@ -87,8 +89,8 @@ public class UserInfoActivity extends BaseActivity {
             ToastUtil.showMsg("尚未连接IM服务器");
             return;
         }
-        //TODO 会话：4.1、创建一个常态会话入口，陌生人聊天
-        BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
+        // 创建一个常态会话入口，陌生人聊天
+        BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(mUserInfo.getBmobIMUserInfo(), null);
         ChatActivity.startActivity(this, new IMConversation(conversationEntrance));
     }
 }

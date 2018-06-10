@@ -38,15 +38,11 @@ public abstract class Conversation implements Serializable, Comparable {
 
     /**
      * 获取最后一条消息的时间
-     *
-     * @return
      */
     abstract public String getLastMessageContent();
 
     /**
      * 获取未读会话个数
-     *
-     * @return
      */
     abstract public int getUnReadCount();
 
@@ -57,15 +53,11 @@ public abstract class Conversation implements Serializable, Comparable {
 
     /**
      * 点击事件
-     *
-     * @param context
      */
     abstract public void onClick(Context context);
 
     /**
      * 长按事件
-     *
-     * @param context
      */
     abstract public void onLongClick(Context context);
 
