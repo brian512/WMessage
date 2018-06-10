@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.brian.common.base.BaseFragment;
-import com.brian.common.tools.GsonHelper;
 import com.brian.common.utils.HandlerUtil;
 import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.R;
@@ -92,7 +91,7 @@ public class ConversationListFragment extends BaseFragment {
         @Override
         public void onReceiveMessage(IMMessage message) {
             BmobIMMessage bmobIMMessage = message.getBmobIMMessage();
-            LogUtil.d("mFromUserInfo=" + GsonHelper.toJson(message.mFromUserInfo));
+            LogUtil.d("mFromUserInfo=" + message.mFromUserInfo);
             BmobIMConversation conversation = bmobIMMessage.getBmobIMConversation();
             P2PConversation p2PConversation = new P2PConversation(conversation);
             p2PConversation.setLastMsg(bmobIMMessage);
@@ -115,7 +114,7 @@ public class ConversationListFragment extends BaseFragment {
                 switch (item.getConversationType()) {
                     case 1://私聊
                         if (item.getMessages() != null && item.getMessages().size() > 0) {
-                            LogUtil.d("conversation=" + GsonHelper.toJson(item));
+//                            LogUtil.d("conversation=" + GsonHelper.toJson(item));
                             conversationList.add(new P2PConversation(item));
                         }
                         break;
@@ -129,4 +128,12 @@ public class ConversationListFragment extends BaseFragment {
         return conversationList;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser && mListAdapter != null) {
+            mListAdapter.bindData(getConversations());
+        }
+    }
 }

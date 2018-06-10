@@ -29,7 +29,13 @@ public class ConversationListAdapter extends BaseRecyclerAdapter<Conversation, C
     public void addOrUpdate(int index, Conversation c) {
         for (Conversation conversation : mDataList) {
             if (TextUtils.equals(conversation.getcId(), c.getConversation().getConversationId())) {
-                update(conversation);
+                if (conversation instanceof P2PConversation && c instanceof P2PConversation) {
+                    ((P2PConversation)conversation).setLastMsg(((P2PConversation) c).getLastMsg());
+                } else {
+                    conversation.getConversation().getMessages().clear();
+                    conversation.getConversation().getMessages().addAll(c.getConversation().getMessages());
+                }
+                super.addOrUpdate(0, conversation);
                 return;
             }
         }

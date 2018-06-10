@@ -1,8 +1,5 @@
 package com.brian.wmessage.entity;
 
-import com.brian.common.tools.GsonHelper;
-import com.brian.common.utils.LogUtil;
-
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMUserInfo;
 
@@ -25,7 +22,6 @@ public class IMMessage extends BmobIMMessage {
     }
 
     public void setFromUserInfo(BmobIMUserInfo fromUserInfo) {
-        LogUtil.d("mFromUserInfo=" + GsonHelper.toJson(mFromUserInfo));
         mFromUserInfo = fromUserInfo;
     }
 

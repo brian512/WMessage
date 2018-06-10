@@ -49,6 +49,10 @@ public class P2PConversation extends Conversation {
         }
     }
 
+    public BmobIMMessage getLastMsg() {
+        return lastMsg;
+    }
+
     public BmobIMConversation getConversation() {
         return mConversation;
     }
@@ -70,12 +74,12 @@ public class P2PConversation extends Conversation {
                     // 消息发送者id 与 聊天id相同，则读取该用户的头像
                     if (TextUtils.equals(message.getFromId(), message.getConversationId())) {
                         BmobIMUserInfo userInfo = BmobHelper.getInstance().getUserInfo(message.getFromId());
-                        LogUtil.d("BmobIMUserInfo=" + GsonHelper.toJson(userInfo));
+//                        LogUtil.d("BmobIMUserInfo=" + GsonHelper.toJson(userInfo));
                         if (userInfo != null && !TextUtils.isEmpty(userInfo.getAvatar())) {
                             return userInfo.getAvatar();
                         } else {
                             UserInfo info = UserListManager.getInstance().getUserInfo(message.getFromId());
-                            LogUtil.d("UserInfo=" + GsonHelper.toJson(info));
+//                            LogUtil.d("UserInfo=" + GsonHelper.toJson(info));
                             if (info != null && !TextUtils.isEmpty(info.getAvatar())) {
                                 return info.getAvatar();
                             }
@@ -104,7 +108,7 @@ public class P2PConversation extends Conversation {
             String name = mConversation.getConversationTitle();
             List<BmobIMMessage> messageList = mConversation.getMessages();
             for (BmobIMMessage message : messageList) {
-                LogUtil.d("message=" + GsonHelper.toJson(message));
+//                LogUtil.d("message=" + GsonHelper.toJson(message));
                 if (TextUtils.equals(message.getFromId(), message.getConversationId())) {
                     BmobIMUserInfo userInfo = BmobHelper.getInstance().getUserInfo(message.getFromId());
                     if (userInfo != null && !TextUtils.isEmpty(userInfo.getName())) {
@@ -115,7 +119,7 @@ public class P2PConversation extends Conversation {
                             return info.getUsername();
                         }
                     }
-                    LogUtil.d("getBmobIMUserInfo=" + GsonHelper.toJson(message.getBmobIMUserInfo()));
+//                    LogUtil.d("getBmobIMUserInfo=" + GsonHelper.toJson(message.getBmobIMUserInfo()));
                     if (message.getBmobIMUserInfo() != null && !TextUtils.isEmpty(message.getBmobIMUserInfo().getAvatar())) {
                         name = message.getBmobIMUserInfo().getName();
                         break;
