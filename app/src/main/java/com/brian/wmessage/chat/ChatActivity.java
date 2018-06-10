@@ -34,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMUserInfo;
+import cn.bmob.newim.core.BmobIMClient;
 import cn.bmob.newim.listener.MessageSendListener;
 import cn.bmob.newim.listener.MessagesQueryListener;
 import cn.bmob.v3.exception.BmobException;
@@ -200,6 +201,10 @@ public class ChatActivity extends BaseActivity {
                 scrollToBottom();
                 try {
                     // 更新该会话下面的已读状态
+                    LogUtil.d("mConversation.getConversation().client=" + mConversation.getConversation().client);
+                    if (mConversation.getConversation().client == null) {
+                        mConversation.getConversation().client = BmobIMClient.getInstance();
+                    }
                     mConversation.getConversation().updateReceiveStatus(message);
                 } catch (Exception e) {
                     LogUtil.printError(e);
