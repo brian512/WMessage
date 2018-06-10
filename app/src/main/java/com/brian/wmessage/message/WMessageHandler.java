@@ -6,9 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.brian.common.tools.Env;
+import com.brian.common.tools.GsonHelper;
 import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.MainActivity;
 import com.brian.wmessage.R;
+import com.brian.wmessage.entity.IMMessage;
 
 import java.util.List;
 import java.util.Map;
@@ -57,11 +59,11 @@ public class WMessageHandler extends BmobIMMessageHandler {
      * 处理消息
      */
     private void executeMessage(final MessageEvent event) {
+        LogUtil.d("event=" + GsonHelper.toJson(event));
         BmobIMMessage msg = event.getMessage();
-        LogUtil.i(msg.toString());
         if (BmobIMMessageType.getMessageTypeValue(msg.getMsgType()) == 0) {
             //自定义消息类型：0
-            processCustomMessage(msg, event.getFromUserInfo());
+            processCustomMessage(new IMMessage(msg), event.getFromUserInfo());
         } else {
             //SDK内部内部支持的消息类型
             processSDKMessage(msg, event);
@@ -88,7 +90,7 @@ public class WMessageHandler extends BmobIMMessageHandler {
                     info.getName(), msg.getContent(), "您有一条新消息", pendingIntent);
         } else {
             //直接发送消息事件
-            MessageDispatcher.getInstance().dispatchMessage(msg);
+            processCustomMessage(new IMMessage(msg), event.getFromUserInfo());
         }
     }
 
@@ -96,7 +98,8 @@ public class WMessageHandler extends BmobIMMessageHandler {
     /**
      * 处理自定义消息类型
      */
-    private void processCustomMessage(BmobIMMessage msg, BmobIMUserInfo info) {
+    private void processCustomMessage(IMMessage msg, BmobIMUserInfo info) {
+        msg.setFromUserInfo(info);
         MessageDispatcher.getInstance().dispatchMessage(msg);
     }
 }

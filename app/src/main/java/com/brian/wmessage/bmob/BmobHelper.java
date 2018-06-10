@@ -5,7 +5,8 @@ import android.text.TextUtils;
 
 import com.brian.common.utils.LogUtil;
 import com.brian.common.utils.RandomUtil;
-import com.brian.wmessage.entity.Friend;
+import com.brian.wmessage.contact.UserListManager;
+import com.brian.wmessage.entity.FriendInfo;
 import com.brian.wmessage.entity.UserInfo;
 import com.brian.wmessage.message.WMessageHandler;
 import com.github.promeg.pinyinhelper.Pinyin;
@@ -94,21 +95,21 @@ public class BmobHelper {
     /**
      * 查询好友
      */
-    public void queryFriends(final FindListener<Friend> listener) {
-        BmobQuery<Friend> query = new BmobQuery<>();
+    public void queryFriends(final FindListener<FriendInfo> listener) {
+        BmobQuery<FriendInfo> query = new BmobQuery<>();
         UserInfo user = BmobUser.getCurrentUser(UserInfo.class);
         query.addWhereEqualTo("user", user);
         query.include("friendUser");
         query.order("-updatedAt");
-        query.findObjects(new FindListener<Friend>() {
+        query.findObjects(new FindListener<FriendInfo>() {
             @Override
-            public void done(List<Friend> list, BmobException e) {
+            public void done(List<FriendInfo> list, BmobException e) {
                 if (e != null) {
                     listener.done(list, e);
                 } else {
                     if (list != null && list.size() > 0) {
                         for (int i = 0; i < list.size(); i++) {
-                            Friend friend = list.get(i);
+                            FriendInfo friend = list.get(i);
                             String username = friend.getFriendUser().getUsername();
                             if (username != null) {
                                 String pinyin = Pinyin.toPinyin(username.charAt(0));
@@ -185,6 +186,9 @@ public class BmobHelper {
             public void done(List<UserInfo> list, BmobException e) {
                 if (e == null) {
                     if (list != null && list.size() > 0) {
+                        for (UserInfo info : list) {
+                            UserListManager.getInstance().addUser(info);
+                        }
                         listener.done(list, null);
                     } else {
                         listener.done(list, new BmobException(CODE_ERROR_EMPTY, "查无此人"));
@@ -194,5 +198,9 @@ public class BmobHelper {
                 }
             }
         });
+    }
+
+    public BmobIMUserInfo getUserInfo(String userId) {
+        return BmobIM.getInstance().getUserInfo(userId);
     }
 }

@@ -9,12 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.brian.common.base.BaseFragment;
+import com.brian.common.tools.GsonHelper;
+import com.brian.common.utils.HandlerUtil;
 import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.R;
 import com.brian.wmessage.entity.Conversation;
-import com.brian.wmessage.entity.IMConversation;
+import com.brian.wmessage.entity.IMMessage;
 import com.brian.wmessage.entity.P2PConversation;
 import com.brian.wmessage.message.MessageDispatcher;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +35,8 @@ public class ConversationListFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
 
+    private SmartRefreshLayout mRefreshLayout;
+
     private ConversationListAdapter mListAdapter;
 
 
@@ -46,14 +51,30 @@ public class ConversationListFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootLy = inflater.inflate(R.layout.list_fragment_layout, null);
+        mRefreshLayout = rootLy.findViewById(R.id.refreshLayout);
         mRecyclerView = rootLy.findViewById(R.id.recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mListAdapter = new ConversationListAdapter();
         mRecyclerView.setAdapter(mListAdapter);
-        mListAdapter.bindData(getConversations());
+
+        mRefreshLayout.setEnableRefresh(false);
+        mRefreshLayout.setEnableLoadMore(false);
+
         return rootLy;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mListAdapter.bindData(getConversations());
+        // 更新数据
+        HandlerUtil.getUIHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mListAdapter.bindData(getConversations());
+            }
+        }, 500);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,9 +90,14 @@ public class ConversationListFragment extends BaseFragment {
 
     private MessageDispatcher.IMessageListener mMessageListener = new MessageDispatcher.IMessageListener() {
         @Override
-        public void onReceiveMessage(BmobIMMessage message) {
-            LogUtil.d("message=" + message.toString());
-            mListAdapter.addOrUpdate(0, new P2PConversation(new IMConversation(message.getBmobIMConversation())), message);
+        public void onReceiveMessage(IMMessage message) {
+            BmobIMMessage bmobIMMessage = message.getBmobIMMessage();
+            LogUtil.d("mFromUserInfo=" + GsonHelper.toJson(message.mFromUserInfo));
+            BmobIMConversation conversation = bmobIMMessage.getBmobIMConversation();
+            P2PConversation p2PConversation = new P2PConversation(conversation);
+            p2PConversation.setLastMsg(bmobIMMessage);
+            LogUtil.d("message=" + bmobIMMessage.toString());
+            mListAdapter.addOrUpdate(0, p2PConversation);
         }
     };
 
@@ -89,7 +115,8 @@ public class ConversationListFragment extends BaseFragment {
                 switch (item.getConversationType()) {
                     case 1://私聊
                         if (item.getMessages() != null && item.getMessages().size() > 0) {
-                            conversationList.add(new P2PConversation(new IMConversation(item)));
+                            LogUtil.d("conversation=" + GsonHelper.toJson(item));
+                            conversationList.add(new P2PConversation(item));
                         }
                         break;
                     default:

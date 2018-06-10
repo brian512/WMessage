@@ -1,8 +1,8 @@
 package com.brian.wmessage.message;
 
-import java.util.ArrayList;
+import com.brian.wmessage.entity.IMMessage;
 
-import cn.bmob.newim.bean.BmobIMMessage;
+import java.util.ArrayList;
 
 /**
  * 消息分发
@@ -35,7 +35,7 @@ public class MessageDispatcher {
         }
     }
 
-    public void dispatchMessage(BmobIMMessage message) {
+    public void dispatchMessage(IMMessage message) {
         synchronized (sInstance) {
             for (IMessageListener listener : mMessageListeners) {
                 listener.onReceiveMessage(message);
@@ -45,7 +45,7 @@ public class MessageDispatcher {
 
 
     public interface IMessageListener {
-        void onReceiveMessage(BmobIMMessage message);
+        void onReceiveMessage(IMMessage message);
     }
 
 

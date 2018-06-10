@@ -24,7 +24,8 @@ import com.brian.common.views.TitleBar;
 import com.brian.common.views.recyclerview.RecyclerViewUtil;
 import com.brian.wmessage.R;
 import com.brian.wmessage.bmob.BmobHelper;
-import com.brian.wmessage.entity.IMConversation;
+import com.brian.wmessage.entity.IMMessage;
+import com.brian.wmessage.entity.P2PConversation;
 import com.brian.wmessage.message.MessageDispatcher;
 
 import java.util.List;
@@ -69,9 +70,9 @@ public class ChatActivity extends BaseActivity {
 
     private LinearLayoutManager mLayoutManager;
 
-    private IMConversation mConversation;
+    private P2PConversation mConversation;
 
-    public static void startActivity(Context context, IMConversation conversation) {
+    public static void startActivity(Context context, P2PConversation conversation) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(EXTRA_CONVERSATION, conversation);
         if (!(context instanceof Activity)) {
@@ -80,7 +81,7 @@ public class ChatActivity extends BaseActivity {
         context.startActivity(intent);
     }
 
-    public static void startActivity(Context context, BmobIMUserInfo userInfo, IMConversation conversation) {
+    public static void startActivity(Context context, BmobIMUserInfo userInfo, P2PConversation conversation) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(EXTRA_CONVERSATION, conversation);
         intent.putExtra(EXTRA_USERINFO, userInfo);
@@ -96,7 +97,7 @@ public class ChatActivity extends BaseActivity {
         setContentView(R.layout.chat_activity);
         ButterKnife.bind(this);
 
-        mConversation = (IMConversation) getIntent().getSerializableExtra(EXTRA_CONVERSATION);
+        mConversation = (P2PConversation) getIntent().getSerializableExtra(EXTRA_CONVERSATION);
         mUserInfo = (BmobIMUserInfo) getIntent().getSerializableExtra(EXTRA_USERINFO);
 
         initUI();
@@ -182,8 +183,8 @@ public class ChatActivity extends BaseActivity {
 
     private MessageDispatcher.IMessageListener mMessageListener = new MessageDispatcher.IMessageListener() {
         @Override
-        public void onReceiveMessage(BmobIMMessage message) {
-            addMessage2Chat(message);
+        public void onReceiveMessage(IMMessage message) {
+            addMessage2Chat(message.getBmobIMMessage());
         }
     };
 
@@ -191,6 +192,7 @@ public class ChatActivity extends BaseActivity {
      * 添加消息到聊天界面中
      */
     private void addMessage2Chat(BmobIMMessage message) {
+        LogUtil.d("message=" + message);
         if (mConversation != null && mConversation.getConversation().getConversationId().equals(message.getConversationId()) //如果是当前会话的消息
                 && !message.isTransient()) {//并且不为暂态消息
             if (mChatAdapter.findPosition(message) < 0) {//如果未添加到界面中

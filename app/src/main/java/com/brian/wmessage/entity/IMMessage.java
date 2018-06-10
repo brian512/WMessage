@@ -1,22 +1,35 @@
 package com.brian.wmessage.entity;
 
-import java.util.Map;
+import com.brian.common.tools.GsonHelper;
+import com.brian.common.utils.LogUtil;
 
-import cn.bmob.newim.bean.BmobIMExtraMessage;
+import cn.bmob.newim.bean.BmobIMMessage;
+import cn.bmob.newim.bean.BmobIMUserInfo;
 
 /**
  * @author Brian on 2018/6/9.
  */
-public class IMMessage extends BmobIMExtraMessage {
+public class IMMessage extends BmobIMMessage {
 
 
-    public BmobIMExtraMessage mMessage;
+    public BmobIMMessage mMessage;
 
-    public IMMessage(BmobIMExtraMessage message) {
+    public BmobIMUserInfo mFromUserInfo;
+
+    public IMMessage(BmobIMMessage message) {
         mMessage = message;
     }
 
-    public Map<String, Object> getExtraMap() {
-        return super.getExtraMap();
+    public BmobIMMessage getBmobIMMessage() {
+        return mMessage;
+    }
+
+    public void setFromUserInfo(BmobIMUserInfo fromUserInfo) {
+        LogUtil.d("mFromUserInfo=" + GsonHelper.toJson(mFromUserInfo));
+        mFromUserInfo = fromUserInfo;
+    }
+
+    public BmobIMUserInfo getFromUserInfo() {
+        return mFromUserInfo;
     }
 }

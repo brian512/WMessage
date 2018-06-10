@@ -42,4 +42,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     implementation 'com.github.promeg:tinypinyin:1.0.0'
+
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
 }

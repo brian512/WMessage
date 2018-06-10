@@ -1,6 +1,7 @@
 package com.brian.wmessage.chat;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.R;
+import com.brian.wmessage.contact.UserListManager;
 import com.brian.wmessage.entity.UserInfo;
 
 import java.text.SimpleDateFormat;
@@ -42,7 +44,16 @@ public class ReceiveTextHolder extends BaseViewHolder {
         String time = dateFormat.format(message.getCreateTime());
         mTimeTv.setText(time);
         final BmobIMUserInfo info = message.getBmobIMUserInfo();
-        UserInfo.showHead(mAvatarIv, info != null ? info.getAvatar() : "0");
+        if (info != null && !TextUtils.isEmpty(info.getAvatar())) {
+            UserInfo.showHead(mAvatarIv, info.getAvatar());
+        } else {
+            UserInfo userInfo = UserListManager.getInstance().getUserInfo(message.getFromId());
+            if (userInfo != null && !TextUtils.isEmpty(userInfo.getAvatar())) {
+                UserInfo.showHead(mAvatarIv, userInfo.getAvatar());
+            } else {
+                UserInfo.showHead(mAvatarIv, "0");
+            }
+        }
         String content = message.getContent();
         mMessageTv.setText(content);
         mAvatarIv.setOnClickListener(new View.OnClickListener() {

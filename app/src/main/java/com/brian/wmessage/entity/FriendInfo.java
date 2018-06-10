@@ -7,7 +7,7 @@ import cn.bmob.v3.BmobObject;
  *
  * @author huamm
  */
-public class Friend extends BmobObject {
+public class FriendInfo extends BmobObject {
 
     private UserInfo user;
     private UserInfo friendUser;

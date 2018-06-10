@@ -13,7 +13,7 @@ import com.brian.common.base.BaseActivity;
 import com.brian.common.utils.ToastUtil;
 import com.brian.wmessage.R;
 import com.brian.wmessage.chat.ChatActivity;
-import com.brian.wmessage.entity.IMConversation;
+import com.brian.wmessage.entity.P2PConversation;
 import com.brian.wmessage.entity.UserInfo;
 
 import butterknife.BindView;
@@ -91,6 +91,6 @@ public class UserInfoActivity extends BaseActivity {
         }
         // 创建一个常态会话入口，陌生人聊天
         BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(mUserInfo.getBmobIMUserInfo(), null);
-        ChatActivity.startActivity(this, new IMConversation(conversationEntrance));
+        ChatActivity.startActivity(this, new P2PConversation(conversationEntrance));
     }
 }

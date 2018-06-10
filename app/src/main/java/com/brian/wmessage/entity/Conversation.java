@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.io.Serializable;
 
+import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMConversationType;
 
 /**
@@ -26,10 +27,27 @@ public abstract class Conversation implements Serializable, Comparable {
      */
     protected String cName;
 
+    protected BmobIMConversation mConversation;
+
+    public Conversation(BmobIMConversation conversation) {
+        mConversation = conversation;
+    }
+
+    public void setConversation(BmobIMConversation conversation) {
+        mConversation = conversation;
+    }
+
+    public BmobIMConversation getConversation() {
+        return mConversation;
+    }
+
+
     /**
      * 获取头像-用于会话界面显示
      */
     abstract public Object getAvatar();
+
+    abstract public String getName();
 
     /**
      * 获取最后一条消息的时间
@@ -60,10 +78,6 @@ public abstract class Conversation implements Serializable, Comparable {
      * 长按事件
      */
     abstract public void onLongClick(Context context);
-
-    public String getcName() {
-        return cName;
-    }
 
     public String getcId() {
         return cId;

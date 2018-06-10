@@ -1,13 +1,9 @@
 package com.brian.wmessage.chat;
 
 import com.brian.common.utils.LogUtil;
-import com.brian.wmessage.bmob.BmobHelper;
-import com.brian.wmessage.entity.IMConversation;
 import com.brian.wmessage.entity.IMMessage;
+import com.brian.wmessage.entity.P2PConversation;
 import com.brian.wmessage.message.MessageDispatcher;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import cn.bmob.newim.bean.BmobIMAudioMessage;
 import cn.bmob.newim.bean.BmobIMConversation;
@@ -59,7 +55,7 @@ public class MessageSendHelper {
     };
 
 
-    public BmobIMTextMessage sendTextMessage(IMConversation conversation, String text) {
+    public BmobIMTextMessage sendTextMessage(P2PConversation conversation, String text) {
         BmobIMTextMessage msg = new BmobIMTextMessage();
         msg.setContent(text);
         //可随意设置额外信息
@@ -71,7 +67,7 @@ public class MessageSendHelper {
         return msg;
     }
 
-    public BmobIMTextMessage sendTextMessage(IMConversation conversation, String text, MessageSendListener listener) {
+    public BmobIMTextMessage sendTextMessage(P2PConversation conversation, String text, MessageSendListener listener) {
         BmobIMTextMessage msg = new BmobIMTextMessage();
         msg.setContent(text);
         sendMessage(conversation, new IMMessage(msg), listener);
@@ -81,7 +77,7 @@ public class MessageSendHelper {
     /**
      * 发送语音消息
      */
-    public void sendVoiceMessage(IMConversation conversation, String local) {
+    public void sendVoiceMessage(P2PConversation conversation, String local) {
         BmobIMAudioMessage audioMsg = new BmobIMAudioMessage(local);
         sendMessage(conversation, new IMMessage(audioMsg));
     }
@@ -89,7 +85,7 @@ public class MessageSendHelper {
     /**
      * 发送图片消息
      */
-    public void sendImageMessage(IMConversation conversation, String local) {
+    public void sendImageMessage(P2PConversation conversation, String local) {
         BmobIMImageMessage audioMsg = new BmobIMImageMessage(local);
         sendMessage(conversation, new IMMessage(audioMsg));
     }
@@ -97,7 +93,7 @@ public class MessageSendHelper {
     /**
      * 发送视频消息
      */
-    public void sendVideoMessage(IMConversation conversation, String local) {
+    public void sendVideoMessage(P2PConversation conversation, String local) {
         BmobIMVideoMessage audioMsg = new BmobIMVideoMessage(local);
         sendMessage(conversation, new IMMessage(audioMsg));
     }
@@ -105,27 +101,19 @@ public class MessageSendHelper {
     /**
      * 发送地址消息
      */
-    public void sendVideoMessage(IMConversation conversation, String address, double latitude, double longitude) {
+    public void sendVideoMessage(P2PConversation conversation, String address, double latitude, double longitude) {
         BmobIMLocationMessage audioMsg = new BmobIMLocationMessage(address, latitude, longitude);
         sendMessage(conversation, new IMMessage(audioMsg));
     }
 
-    private void sendMessage(IMConversation conversation, IMMessage message) {
+    private void sendMessage(P2PConversation conversation, IMMessage message) {
         sendMessage(conversation, message, mMessageSendListener);
     }
 
-    public void sendMessage(IMConversation conversation, IMMessage message, MessageSendListener listener) {
+    public void sendMessage(P2PConversation conversation, IMMessage message, MessageSendListener listener) {
         BmobIMConversation conversationManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversation.getConversation());
-        //可随意设置额外信息
-        Map<String, Object> map = message.getExtraMap();
-        if (map == null) {
-            map = new HashMap<>();
-        }
-        map.put("my_avatar", BmobHelper.getInstance().getCurrentUser().getAvatar());
-        map.put("my_name", BmobHelper.getInstance().getCurrentUser().getUsername());
-        message.mMessage.setExtraMap(map);
         conversationManager.sendMessage(message.mMessage, listener);
-        MessageDispatcher.getInstance().dispatchMessage(message.mMessage);
+        MessageDispatcher.getInstance().dispatchMessage(message);
     }
 
 }

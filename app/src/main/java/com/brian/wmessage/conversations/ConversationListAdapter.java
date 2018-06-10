@@ -18,8 +18,6 @@ import com.brian.wmessage.entity.UserInfo;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import cn.bmob.newim.bean.BmobIMMessage;
-
 /**
  * 会话列表适配
  * @author huamm
@@ -27,10 +25,10 @@ import cn.bmob.newim.bean.BmobIMMessage;
 public class ConversationListAdapter extends BaseRecyclerAdapter<Conversation, ConversationListAdapter.ItemViewHolder> {
 
 
-    public void addOrUpdate(int index, Conversation c, BmobIMMessage message) {
+    @Override
+    public void addOrUpdate(int index, Conversation c) {
         for (Conversation conversation : mDataList) {
-            if (TextUtils.equals(conversation.getcId(), message.getConversationId())) {
-                ((P2PConversation)conversation).setLastMsg(message);
+            if (TextUtils.equals(conversation.getcId(), c.getConversation().getConversationId())) {
                 update(conversation);
                 return;
             }
@@ -40,11 +38,17 @@ public class ConversationListAdapter extends BaseRecyclerAdapter<Conversation, C
 
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, final Conversation item, int position) {
-        String avatar = (String) item.getAvatar();
+        String avatar = (String) item.getAvatar(); //TODO 增加聊天类型后需要区分
         UserInfo.showHead(holder.headView, TextUtils.isEmpty(avatar) ? "0" : avatar);
-        holder.nameView.setText(item.getcName());
+        item.getConversation().setConversationIcon(avatar);
+
+        String cName = item.getName();
+        holder.nameView.setText(cName);
+        item.getConversation().setConversationTitle(cName);
+
         holder.msgView.setText(item.getLastMessageContent().replace("\n", " "));
         holder.timeView.setText(getChatTime(false, item.getLastMessageTime()));
+
         int unreadCnt = item.getUnReadCount();
         if (unreadCnt > 0) {
             holder.unreadView.setText("" + unreadCnt);
@@ -60,7 +64,7 @@ public class ConversationListAdapter extends BaseRecyclerAdapter<Conversation, C
                 if (item instanceof P2PConversation) {
                     holder.unreadView.setText("0");
                     holder.unreadView.setVisibility(View.INVISIBLE);
-                    ChatActivity.startActivity(v.getContext(), ((P2PConversation)item).getConversation());
+                    ChatActivity.startActivity(v.getContext(), (P2PConversation)item);
                 }
             }
         });

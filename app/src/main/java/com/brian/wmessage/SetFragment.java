@@ -52,7 +52,7 @@ public class SetFragment extends BaseFragment {
     private void logout() {
         BmobUser.logOut();
         BmobIM.getInstance().disConnect();
-        getActivity().finish();
         LoginActivity.startActivity(getContext());
+        getActivity().finish();
     }
 }
