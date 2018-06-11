@@ -29,18 +29,19 @@ public abstract class Conversation implements Serializable, Comparable {
 
     public String cAvatar;
 
-
-
     public BmobIMConversation mConversation;
 
     public Conversation(BmobIMConversation conversation) {
         mConversation = conversation;
     }
 
+    public String getConversationId() {
+        return cId;
+    }
+
     public BmobIMConversation getConversation() {
         return mConversation;
     }
-
 
     /**
      * 获取头像-用于会话界面显示

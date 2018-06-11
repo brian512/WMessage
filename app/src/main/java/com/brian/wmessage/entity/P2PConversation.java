@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.brian.common.tools.GsonHelper;
 import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.R;
-import com.brian.wmessage.bmob.BmobHelper;
+import com.brian.wmessage.imservice.bmob.BmobHelper;
 import com.brian.wmessage.contact.UserListManager;
 
 import java.util.List;
@@ -50,9 +50,6 @@ public class P2PConversation extends Conversation {
         return lastMsg;
     }
 
-    public BmobIMConversation getConversation() {
-        return mConversation;
-    }
 
     @Override
     public void readAllMessages() {

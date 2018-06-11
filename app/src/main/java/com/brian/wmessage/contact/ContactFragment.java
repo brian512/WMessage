@@ -9,13 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.brian.common.base.BaseFragment;
+import com.brian.common.utils.LogUtil;
 import com.brian.common.utils.ToastUtil;
 import com.brian.common.views.recyclerview.BaseRecyclerAdapter;
 import com.brian.wmessage.R;
-import com.brian.wmessage.bmob.BmobHelper;
+import com.brian.wmessage.imservice.bmob.BmobHelper;
 import com.brian.wmessage.chat.ChatActivity;
 import com.brian.wmessage.conversations.ConversationManager;
 import com.brian.wmessage.entity.UserInfo;
+import com.brian.wmessage.imservice.IIMServiceStateListener;
+import com.brian.wmessage.imservice.IMServiceManager;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
@@ -36,7 +39,6 @@ public class ContactFragment extends BaseFragment {
 
     private ContactAdapter mListAdapter;
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootLy = inflater.inflate(R.layout.list_fragment_layout, null);
@@ -55,6 +57,20 @@ public class ContactFragment extends BaseFragment {
         loadUserList();
 
         return rootLy;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        IMServiceManager.getInstance().registerListener(new IIMServiceStateListener() {
+            @Override
+            public void onIMStateChang(int state) {
+                LogUtil.d("state=" + state);
+                if (state == IMServiceManager.STATE_CONNECTED) {
+                    loadUserList();
+                }
+            }
+        });
     }
 
     private void initListeners() {

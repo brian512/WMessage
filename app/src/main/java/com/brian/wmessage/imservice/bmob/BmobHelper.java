@@ -1,9 +1,10 @@
-package com.brian.wmessage.bmob;
+package com.brian.wmessage.imservice.bmob;
 
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.brian.common.base.IBaseRequestDataListener;
+import com.brian.common.tools.NetworkMonitor;
 import com.brian.common.utils.LogUtil;
 import com.brian.common.utils.RandomUtil;
 import com.brian.wmessage.chat.MessageSendHelper;
@@ -50,6 +51,14 @@ public class BmobHelper {
     public void init(Context context) {
         BmobIM.init(context);
         BmobIM.registerDefaultMessageHandler(new BmobMessageHandler());
+        NetworkMonitor.getInstance().subscribe(context, new NetworkMonitor.OnNetworkChangedListener() {
+            @Override
+            public void onNetworkChanged(boolean isConnected, int type) {
+                if (isConnected) {
+                    checkOnlineState();
+                }
+            }
+        });
     }
 
     public boolean isMySelef(String userId) {
@@ -84,17 +93,15 @@ public class BmobHelper {
                     }
                 }
             });
-            // 监听连接状态，可通过BmobIM.getInstance().getCurrentStatus()来获取当前的长连接状态
-            BmobIM.getInstance().setOnConnectStatusChangeListener(new ConnectStatusChangeListener() {
-                @Override
-                public void onChange(ConnectionStatus status) {
-                    LogUtil.d(status.getMsg());
-                }
-            });
+
         }
         return true;
     }
 
+    public void setOnConnectStatusChangeListener(ConnectStatusChangeListener listener) {
+        // 监听连接状态，可通过BmobIM.getInstance().getCurrentStatus()来获取当前的长连接状态
+        BmobIM.getInstance().setOnConnectStatusChangeListener(listener);
+    }
 
     /**
      * 查询好友

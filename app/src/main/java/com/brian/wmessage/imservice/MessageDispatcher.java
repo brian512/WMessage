@@ -1,4 +1,4 @@
-package com.brian.wmessage.message;
+package com.brian.wmessage.imservice;
 
 import com.brian.wmessage.chat.MessageSendHelper;
 import com.brian.wmessage.entity.IMMessage;

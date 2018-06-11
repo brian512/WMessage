@@ -10,9 +10,8 @@ import android.widget.TextView;
 
 import com.brian.common.base.BaseFragment;
 import com.brian.wmessage.R;
-import com.brian.wmessage.bmob.BmobHelper;
+import com.brian.wmessage.imservice.bmob.BmobHelper;
 import com.brian.wmessage.entity.UserInfo;
-import com.brian.wmessage.account.LoginActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

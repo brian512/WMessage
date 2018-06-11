@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.brian.common.stat.Stat;
 import com.brian.common.tools.Env;
+import com.brian.common.tools.NetworkMonitor;
 import com.brian.common.utils.LogUtil;
 
 /**
@@ -20,7 +21,7 @@ import com.brian.common.utils.LogUtil;
  * @author huamm
  *
  */
-public class BaseFragment extends Fragment {
+public class BaseFragment extends Fragment implements NetworkMonitor.OnNetworkChangedListener {
 
 
     protected boolean isPaused = false;
@@ -53,6 +54,8 @@ public class BaseFragment extends Fragment {
 
         Stat.onResume(getContext(), getClass().getSimpleName());
 
+        NetworkMonitor.getInstance().subscribe(getContext(), this);
+
         isPaused = false;
     }
 
@@ -63,6 +66,8 @@ public class BaseFragment extends Fragment {
         super.onPause();
 
         isPaused = true;
+
+        NetworkMonitor.getInstance().unsubscribe(getContext(), this);
     }
 
     @Override
@@ -170,5 +175,9 @@ public class BaseFragment extends Fragment {
 
     public boolean onBackPressed() {
         return false;
+    }
+
+    @Override
+    public void onNetworkChanged(boolean isConnected, int type) {
     }
 }

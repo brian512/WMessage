@@ -1,4 +1,4 @@
-package com.brian.wmessage.bmob;
+package com.brian.wmessage.imservice.bmob;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.MainActivity;
 import com.brian.wmessage.R;
 import com.brian.wmessage.entity.IMMessage;
-import com.brian.wmessage.message.MessageDispatcher;
+import com.brian.wmessage.imservice.MessageDispatcher;
 
 import java.util.List;
 import java.util.Map;

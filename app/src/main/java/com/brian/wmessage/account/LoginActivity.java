@@ -14,7 +14,7 @@ import com.brian.common.base.BaseActivity;
 import com.brian.common.utils.ToastUtil;
 import com.brian.wmessage.MainActivity;
 import com.brian.wmessage.R;
-import com.brian.wmessage.bmob.BmobHelper;
+import com.brian.wmessage.imservice.bmob.BmobHelper;
 import com.brian.wmessage.entity.UserInfo;
 
 import butterknife.BindView;

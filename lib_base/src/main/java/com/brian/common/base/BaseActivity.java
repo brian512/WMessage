@@ -9,11 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 
 import com.brian.common.stat.Stat;
+import com.brian.common.tools.NetworkMonitor;
 import com.brian.common.utils.InputMethodUtil;
 import com.brian.common.utils.LogUtil;
 import com.brian.common.utils.SDKUtil;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements NetworkMonitor.OnNetworkChangedListener {
 
     /**
      * 记录当前最顶部的Activity
@@ -75,6 +76,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         sTopActivity = this; // 确保上一个Activity销毁后，TopActivity指到最上一个Activity
         mIsAppActive = true;
         Stat.onResume(this, getClass().getSimpleName());
+
+        NetworkMonitor.getInstance().subscribe(this, this);
     }
 
     @Override
@@ -92,6 +95,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         mIsAppActive = false;
 
         LogUtil.log(getClass().getSimpleName());
+
+        NetworkMonitor.getInstance().unsubscribe(this, this);
         super.onPause();
     }
 
@@ -222,6 +227,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         getUIHandler().postDelayed(action, delay);
     }
 
+    @Override
+    public void onNetworkChanged(boolean isConnected, int type) {
+    }
 
     private static Handler sH;
     public static Handler getUIHandler() {

@@ -3,7 +3,6 @@ package com.brian.wmessage.chat;
 import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.entity.IMMessage;
 import com.brian.wmessage.entity.P2PConversation;
-import com.brian.wmessage.message.MessageDispatcher;
 
 import cn.bmob.newim.bean.BmobIMAudioMessage;
 import cn.bmob.newim.bean.BmobIMConversation;

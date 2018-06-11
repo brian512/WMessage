@@ -7,9 +7,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
 import com.brian.common.base.BaseActivity;
+import com.brian.common.utils.ToastUtil;
 import com.brian.common.views.TitleBar;
-import com.brian.wmessage.bmob.BmobHelper;
+import com.brian.wmessage.imservice.bmob.BmobHelper;
 import com.brian.wmessage.account.LoginActivity;
+import com.brian.wmessage.imservice.IIMServiceStateListener;
+import com.brian.wmessage.imservice.IMServiceManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,7 +21,7 @@ import butterknife.ButterKnife;
  * 主页面，由viewpager的三个tab组成
  * @author huamm
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements IIMServiceStateListener {
 
     @BindView(R.id.main_pager)
     ViewPager mViewpager;
@@ -72,5 +75,14 @@ public class MainActivity extends BaseActivity {
 //        }
 
         mTitleBar.setTitleResource(R.string.app_name);
+    }
+
+    @Override
+    public void onIMStateChang(int state) {
+        if (state == IMServiceManager.STATE_KICK_ASS) {
+            ToastUtil.showMsg("您的帐号已在其他设备登陆");
+            LoginActivity.startActivity(this);
+            finish();
+        }
     }
 }

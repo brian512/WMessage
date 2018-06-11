@@ -64,6 +64,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
                 mDataList.remove(index);
                 mDataList.add(index, item);
                 notifyItemMoved(oldIndex, index);
+                notifyItemChanged(index);
             }
         } else {
             mDataList.add(index, item);

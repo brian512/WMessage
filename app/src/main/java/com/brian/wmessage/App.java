@@ -1,7 +1,7 @@
 package com.brian.wmessage;
 
 import com.brian.common.base.BaseApplication;
-import com.brian.wmessage.bmob.BmobHelper;
+import com.brian.wmessage.imservice.IMServiceManager;
 
 /**
  * @author huamm
@@ -12,7 +12,7 @@ public class App extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         if (isMainProcess()) {
-            BmobHelper.getInstance().init(this);
+            IMServiceManager.getInstance().init(this);
         }
     }
 }

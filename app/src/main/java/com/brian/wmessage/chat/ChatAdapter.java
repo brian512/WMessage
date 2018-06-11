@@ -81,6 +81,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return this.mMessageList == null ? 0 : this.mMessageList.size();
     }
 
+    public void bindMessages(List<IMMessage> messages) {
+        mMessageList.clear();
+        mMessageList.addAll(messages);
+        notifyDataSetChanged();
+    }
+
     public void addMessages(List<IMMessage> messages) {
         mMessageList.addAll(0, messages);
         notifyItemRangeInserted(0, messages.size());
@@ -108,6 +114,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     public void remove(int position) {
         mMessageList.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        mMessageList.clear();
         notifyDataSetChanged();
     }
 

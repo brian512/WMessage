@@ -10,11 +10,14 @@ import android.view.ViewGroup;
 
 import com.brian.common.base.BaseFragment;
 import com.brian.common.utils.HandlerUtil;
+import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.R;
 import com.brian.wmessage.entity.Conversation;
 import com.brian.wmessage.entity.IMMessage;
 import com.brian.wmessage.entity.P2PConversation;
-import com.brian.wmessage.message.MessageDispatcher;
+import com.brian.wmessage.imservice.IIMServiceStateListener;
+import com.brian.wmessage.imservice.IMServiceManager;
+import com.brian.wmessage.imservice.MessageDispatcher;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.List;
@@ -72,6 +75,16 @@ public class ConversationListFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MessageDispatcher.getInstance().registerListener(mMessageListener);
+
+        IMServiceManager.getInstance().registerListener(new IIMServiceStateListener() {
+            @Override
+            public void onIMStateChang(int state) {
+                LogUtil.d("state=" + state);
+                if (state == IMServiceManager.STATE_CONNECTED) {
+                    mListAdapter.bindData(getConversations());
+                }
+            }
+        });
     }
 
     @Override
@@ -100,7 +113,7 @@ public class ConversationListFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if (isVisibleToUser && mListAdapter != null) {
+        if (isVisibleToUser && mListAdapter != null && IMServiceManager.getInstance().checkConnectState()) {
             mListAdapter.bindData(getConversations());
         }
     }
