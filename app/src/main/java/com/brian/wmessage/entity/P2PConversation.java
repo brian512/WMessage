@@ -1,13 +1,11 @@
 package com.brian.wmessage.entity;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import com.brian.common.tools.GsonHelper;
 import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.R;
 import com.brian.wmessage.bmob.BmobHelper;
-import com.brian.wmessage.chat.ChatActivity;
 import com.brian.wmessage.contact.UserListManager;
 
 import java.util.List;
@@ -16,7 +14,6 @@ import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMConversationType;
 import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMMessageType;
 import cn.bmob.newim.bean.BmobIMUserInfo;
 
 /**
@@ -25,7 +22,7 @@ import cn.bmob.newim.bean.BmobIMUserInfo;
  */
 public class P2PConversation extends Conversation {
 
-    private BmobIMMessage lastMsg;
+    private IMMessage lastMsg;
 
     public P2PConversation(BmobIMConversation conversation) {
         super(conversation);
@@ -39,17 +36,17 @@ public class P2PConversation extends Conversation {
         }
         List<BmobIMMessage> msgs = conversation.getMessages();
         if (msgs != null && msgs.size() > 0) {
-            lastMsg = msgs.get(0);
+            lastMsg = IMMessage.convert(msgs.get(0));
         }
     }
 
-    public void setLastMsg(BmobIMMessage message) {
+    public void setLastMsg(IMMessage message) {
         if (message != null) {
             lastMsg = message;
         }
     }
 
-    public BmobIMMessage getLastMsg() {
+    public IMMessage getLastMsg() {
         return lastMsg;
     }
 
@@ -80,8 +77,8 @@ public class P2PConversation extends Conversation {
                         } else {
                             UserInfo info = UserListManager.getInstance().getUserInfo(message.getFromId());
 //                            LogUtil.d("UserInfo=" + GsonHelper.toJson(info));
-                            if (info != null && !TextUtils.isEmpty(info.getAvatar())) {
-                                return info.getAvatar();
+                            if (info != null && !TextUtils.isEmpty(info.avatar)) {
+                                return info.avatar;
                             }
                         }
                         if (message.getBmobIMUserInfo() != null && !TextUtils.isEmpty(message.getBmobIMUserInfo().getAvatar())) {
@@ -140,20 +137,7 @@ public class P2PConversation extends Conversation {
     @Override
     public String getLastMessageContent() {
         if (lastMsg != null) {
-            String content = lastMsg.getContent();
-            if (lastMsg.getMsgType().equals(BmobIMMessageType.TEXT.getType()) || lastMsg.getMsgType().equals("agree")) {
-                return content;
-            } else if (lastMsg.getMsgType().equals(BmobIMMessageType.IMAGE.getType())) {
-                return "[图片]";
-            } else if (lastMsg.getMsgType().equals(BmobIMMessageType.VOICE.getType())) {
-                return "[语音]";
-            } else if (lastMsg.getMsgType().equals(BmobIMMessageType.LOCATION.getType())) {
-                return "[位置]";
-            } else if (lastMsg.getMsgType().equals(BmobIMMessageType.VIDEO.getType())) {
-                return "[视频]";
-            } else {//开发者自定义的消息类型，需要自行处理
-                return "[未知]";
-            }
+            return lastMsg.formatMessage();
         } else {//防止消息错乱
             return "";
         }
@@ -162,7 +146,7 @@ public class P2PConversation extends Conversation {
     @Override
     public long getLastMessageTime() {
         if (lastMsg != null) {
-            return lastMsg.getCreateTime();
+            return lastMsg.createTime;
         } else {
             return 0;
         }
@@ -171,15 +155,5 @@ public class P2PConversation extends Conversation {
     @Override
     public int getUnReadCount() {
         return (int) BmobIM.getInstance().getUnReadCount(mConversation.getConversationId());
-    }
-
-    @Override
-    public void onClick(Context context) {
-        ChatActivity.startActivity(context, this);
-    }
-
-    @Override
-    public void onLongClick(Context context) {
-        BmobIM.getInstance().deleteConversation(mConversation);
     }
 }

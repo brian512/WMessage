@@ -1,7 +1,5 @@
 package com.brian.wmessage.entity;
 
-import android.content.Context;
-
 import java.io.Serializable;
 
 import cn.bmob.newim.bean.BmobIMConversation;
@@ -17,23 +15,25 @@ public abstract class Conversation implements Serializable, Comparable {
     /**
      * 会话id
      */
-    protected String cId;
+    public String cId;
+
     /**
      * 会话类型
      */
-    protected BmobIMConversationType cType;
+    public BmobIMConversationType cType;
+
     /**
      * 会话名称
      */
-    protected String cName;
+    public String cName;
 
-    protected BmobIMConversation mConversation;
+    public String cAvatar;
+
+
+
+    public BmobIMConversation mConversation;
 
     public Conversation(BmobIMConversation conversation) {
-        mConversation = conversation;
-    }
-
-    public void setConversation(BmobIMConversation conversation) {
         mConversation = conversation;
     }
 
@@ -69,22 +69,8 @@ public abstract class Conversation implements Serializable, Comparable {
      */
     abstract public void readAllMessages();
 
-    /**
-     * 点击事件
-     */
-    abstract public void onClick(Context context);
-
-    /**
-     * 长按事件
-     */
-    abstract public void onLongClick(Context context);
-
     public String getcId() {
         return cId;
-    }
-
-    public BmobIMConversationType getcType() {
-        return cType;
     }
 
     @Override

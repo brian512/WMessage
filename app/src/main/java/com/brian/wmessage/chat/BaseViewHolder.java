@@ -11,39 +11,40 @@ import butterknife.ButterKnife;
 /**
  * @author huamm
  */
-public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
-    OnRecyclerViewListener onRecyclerViewListener;
+    private OnItemClickListener mOnItemClickListener;
     protected Context context;
 
-    public BaseViewHolder(Context context, ViewGroup root, int layoutRes, OnRecyclerViewListener listener) {
+    protected T mData;
+
+    public BaseViewHolder(Context context, ViewGroup root, int layoutRes) {
         super(LayoutInflater.from(context).inflate(layoutRes, root, false));
         this.context = context;
         ButterKnife.bind(this, itemView);
-        this.onRecyclerViewListener = listener;
-        itemView.setOnClickListener(this);
-        itemView.setOnLongClickListener(this);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(v, getAdapterPosition());
+                }
+            }
+        });
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mOnItemClickListener = listener;
     }
 
     public Context getContext() {
         return itemView.getContext();
     }
 
-    public abstract void bindData(T t);
-
-    @Override
-    public void onClick(View v) {
-        if (onRecyclerViewListener != null) {
-            onRecyclerViewListener.onItemClick(getAdapterPosition());
-        }
+    public void bindData(T t) {
+        mData = t;
     }
 
-    @Override
-    public boolean onLongClick(View v) {
-        if (onRecyclerViewListener != null) {
-            onRecyclerViewListener.onItemLongClick(getAdapterPosition());
-        }
-        return true;
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
-
 }

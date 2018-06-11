@@ -24,27 +24,32 @@ public class UserInfo extends BmobUser {
             R.mipmap.default_head_5,
     };
 
-    private BmobIMUserInfo mBmobIMUserInfo;
+    public BmobIMUserInfo mBmobIMUserInfo;
 
-    private String avatar;
+    public String userId;
+
+    public String name;
+
+    public String avatar;
 
     public String getUserId() {
         return getObjectId();
     }
 
-    public String getAvatar() {
-        return avatar;
+    public static UserInfo convert(BmobIMUserInfo bmobIMUserInfo) {
+        if (bmobIMUserInfo == null) {
+            return null;
+        }
+        UserInfo userInfo = new UserInfo();
+        userInfo.updateData(bmobIMUserInfo);
+        return userInfo;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
+    public void updateData(BmobIMUserInfo bmobIMUserInfo) {
+        userId = getObjectId();
+        avatar = bmobIMUserInfo.getAvatar();
+        name = bmobIMUserInfo.getName();
 
-    public BmobIMUserInfo getBmobIMUserInfo() {
-        return mBmobIMUserInfo;
-    }
-
-    public void setBmobIMUserInfo(BmobIMUserInfo bmobIMUserInfo) {
         mBmobIMUserInfo = bmobIMUserInfo;
     }
 

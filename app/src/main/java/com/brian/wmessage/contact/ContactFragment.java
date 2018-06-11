@@ -9,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.brian.common.base.BaseFragment;
-import com.brian.common.utils.LogUtil;
+import com.brian.common.utils.ToastUtil;
 import com.brian.common.views.recyclerview.BaseRecyclerAdapter;
 import com.brian.wmessage.R;
 import com.brian.wmessage.bmob.BmobHelper;
 import com.brian.wmessage.chat.ChatActivity;
-import com.brian.wmessage.entity.P2PConversation;
+import com.brian.wmessage.conversations.ConversationManager;
 import com.brian.wmessage.entity.UserInfo;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -23,12 +23,6 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.List;
-
-import cn.bmob.newim.BmobIM;
-import cn.bmob.newim.bean.BmobIMConversation;
-import cn.bmob.newim.bean.BmobIMUserInfo;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 
 /**
  * 联系人界面
@@ -58,7 +52,7 @@ public class ContactFragment extends BaseFragment {
         mRefreshLayout.setRefreshHeader(new ClassicsHeader(mRefreshLayout.getContext()));
         initListeners();
 
-        query();
+        loadUserList();
 
         return rootLy;
     }
@@ -68,7 +62,7 @@ public class ContactFragment extends BaseFragment {
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
-                query();
+                loadUserList();
             }
         });
 
@@ -83,28 +77,26 @@ public class ContactFragment extends BaseFragment {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
                 UserInfo user = mListAdapter.getItem(position);
-                BmobIMUserInfo info = new BmobIMUserInfo(user.getObjectId(), user.getUsername(), user.getAvatar());
-                BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
-                ChatActivity.startActivity(getContext(), info, new P2PConversation(conversationEntrance));
+                ChatActivity.startActivity(getContext(), ConversationManager.getConversation(user));
             }
         });
     }
 
     /**
-     * 查询本地会话
+     * 获取用户列表
      */
-    public void query() {
-        BmobHelper.getInstance().queryUsers(" ", 20,
-                new FindListener<UserInfo>() {
+    public void loadUserList() {
+        BmobHelper.getInstance().queryUsers(" ", 20, new BmobHelper.OnUserQueryListener() {
                     @Override
-                    public void done(List<UserInfo> list, BmobException e) {
+                    public void onFinish(List<UserInfo> list) {
                         mRefreshLayout.finishRefresh();
-                        if (e == null) {
-                            mListAdapter.bindData(list);
-                        } else {
-                            mListAdapter.bindData(null);
-                            LogUtil.printError(e);
-                        }
+                        mListAdapter.bindData(list);
+                    }
+
+                    @Override
+                    public void onError(int errorCode, String msg) {
+                        mListAdapter.bindData(null);
+                        ToastUtil.showMsg(msg);
                     }
                 }
         );

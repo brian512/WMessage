@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 import com.brian.common.base.BaseActivity;
 import com.brian.common.views.TitleBar;
 import com.brian.wmessage.bmob.BmobHelper;
-import com.brian.wmessage.login.LoginActivity;
+import com.brian.wmessage.account.LoginActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

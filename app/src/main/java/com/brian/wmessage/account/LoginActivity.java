@@ -1,4 +1,4 @@
-package com.brian.wmessage.login;
+package com.brian.wmessage.account;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,8 +19,6 @@ import com.brian.wmessage.entity.UserInfo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.LogInListener;
 
 /**
  * 登录注册页面
@@ -89,19 +87,22 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void doLogin(String username, String password) {
-        BmobHelper.getInstance().login(username, password, new LogInListener() {
+        BmobHelper.getInstance().login(username, password, new BmobHelper.OnLoginListener() {
 
             @Override
-            public void done(Object o, BmobException e) {
-                if (e == null) {
-                    //登录成功
-                    MainActivity.startActivity(LoginActivity.this);
-                    finish();
-                } else if (e.getErrorCode() == 101) {
+            public void onFinish(UserInfo userInfo) {
+                //登录成功
+                MainActivity.startActivity(LoginActivity.this);
+                finish();
+            }
+
+            @Override
+            public void onError(int errorCode, String msg) {
+                if (errorCode == 101) {
                     ToastUtil.showMsg("用户名或密码不正确", true);
                     mPasswordEt.setText("");
                 } else {
-                    ToastUtil.showMsg(e.getMessage() + "(" + e.getErrorCode() + ")");
+                    ToastUtil.showMsg(msg + "(" + errorCode + ")");
                 }
             }
         });

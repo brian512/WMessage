@@ -3,6 +3,7 @@ package com.brian.wmessage.bmob;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.brian.common.base.IBaseRequestDataListener;
 import com.brian.common.utils.LogUtil;
 import com.brian.common.utils.RandomUtil;
 import com.brian.wmessage.contact.UserListManager;
@@ -11,6 +12,7 @@ import com.brian.wmessage.entity.UserInfo;
 import com.brian.wmessage.message.WMessageHandler;
 import com.github.promeg.pinyinhelper.Pinyin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.newim.BmobIM;
@@ -22,7 +24,6 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
@@ -30,10 +31,6 @@ import cn.bmob.v3.listener.SaveListener;
  * @author huamm
  */
 public class BmobHelper {
-
-    public static final int CODE_ERROR_EMPTY = 1000;
-    public static final int CODE_ERROR_MATCH = 1001;
-
 
     private static BmobHelper sInstance = new BmobHelper();
 
@@ -73,7 +70,7 @@ public class BmobHelper {
                         // 更新用户资料，用于在会话页面、聊天页面以及个人信息页面显示
                         BmobIM.getInstance().
                                 updateUserInfo(new BmobIMUserInfo(user.getObjectId(),
-                                        user.getUsername(), user.getAvatar()));
+                                        user.getUsername(), user.avatar));
 //                        EventBus.getDefault().post(new RefreshEvent());
                     } else {
                         LogUtil.d(e.getMessage());
@@ -129,7 +126,7 @@ public class BmobHelper {
     /**
      * 登录
      */
-    public void login(String username, String password, final LogInListener listener) {
+    public void login(String username, String password, final OnLoginListener listener) {
         final UserInfo user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
@@ -137,9 +134,9 @@ public class BmobHelper {
             @Override
             public void done(UserInfo user, BmobException e) {
                 if (e == null) {
-                    listener.done(BmobUser.getCurrentUser(UserInfo.class), null);
+                    listener.onFinish(BmobUser.getCurrentUser(UserInfo.class));
                 } else {
-                    listener.done(user, e);
+                    listener.onError(e.getErrorCode(), e.getMessage());
                 }
             }
         });
@@ -148,18 +145,18 @@ public class BmobHelper {
     /**
      * 注册
      */
-    public void register(String username, String password, final LogInListener listener) {
+    public void register(String username, String password, final OnLoginListener listener) {
         final UserInfo user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
-        user.setAvatar("" + RandomUtil.getRandInt(UserInfo.DEFAULT_HEADS.length));
+        user.avatar = "" + RandomUtil.getRandInt(UserInfo.DEFAULT_HEADS.length);
         user.signUp(new SaveListener<UserInfo>() {
             @Override
             public void done(UserInfo user, BmobException e) {
                 if (e == null) {
-                    listener.done(null, null);
+                    listener.onFinish(user);
                 } else {
-                    listener.done(null, e);
+                    listener.onError(e.getErrorCode(), e.getMessage());
                 }
             }
         });
@@ -169,7 +166,7 @@ public class BmobHelper {
     /**
      * 查询用户
      */
-    public void queryUsers(String username, final int limit, final FindListener<UserInfo> listener) {
+    public void queryUsers(String username, final int limit, final OnUserQueryListener listener) {
         BmobQuery<UserInfo> query = new BmobQuery<>();
         //去掉当前用户
         try {
@@ -185,22 +182,35 @@ public class BmobHelper {
             @Override
             public void done(List<UserInfo> list, BmobException e) {
                 if (e == null) {
-                    if (list != null && list.size() > 0) {
+                    if (list != null) {
                         for (UserInfo info : list) {
                             UserListManager.getInstance().addUser(info);
                         }
-                        listener.done(list, null);
+                        listener.onFinish(list);
                     } else {
-                        listener.done(list, new BmobException(CODE_ERROR_EMPTY, "查无此人"));
+                        listener.onFinish(new ArrayList<UserInfo>());
                     }
                 } else {
-                    listener.done(list, e);
+                    listener.onError(e.getErrorCode(), e.getMessage());
                 }
             }
         });
     }
 
+    public void logout() {
+        BmobUser.logOut();
+        BmobIM.getInstance().disConnect();
+    }
+
     public BmobIMUserInfo getUserInfo(String userId) {
         return BmobIM.getInstance().getUserInfo(userId);
+    }
+
+    public interface OnUserQueryListener extends IBaseRequestDataListener {
+        void onFinish(List<UserInfo> list);
+    }
+
+    public interface OnLoginListener extends IBaseRequestDataListener {
+        void onFinish(UserInfo userInfo);
     }
 }

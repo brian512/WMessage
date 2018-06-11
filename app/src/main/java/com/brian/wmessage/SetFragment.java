@@ -11,12 +11,10 @@ import android.widget.TextView;
 import com.brian.common.base.BaseFragment;
 import com.brian.wmessage.bmob.BmobHelper;
 import com.brian.wmessage.entity.UserInfo;
-import com.brian.wmessage.login.LoginActivity;
+import com.brian.wmessage.account.LoginActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.bmob.newim.BmobIM;
-import cn.bmob.v3.BmobUser;
 
 /**
  * @author huamm
@@ -50,8 +48,7 @@ public class SetFragment extends BaseFragment {
     }
 
     private void logout() {
-        BmobUser.logOut();
-        BmobIM.getInstance().disConnect();
+        BmobHelper.getInstance().logout();
         LoginActivity.startActivity(getContext());
         getActivity().finish();
     }

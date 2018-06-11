@@ -63,7 +63,7 @@ public class WMessageHandler extends BmobIMMessageHandler {
         BmobIMMessage msg = event.getMessage();
         if (BmobIMMessageType.getMessageTypeValue(msg.getMsgType()) == 0) {
             //自定义消息类型：0
-            processCustomMessage(new IMMessage(msg), event.getFromUserInfo());
+            processCustomMessage(IMMessage.convert(msg), event.getFromUserInfo());
         } else {
             //SDK内部内部支持的消息类型
             processSDKMessage(msg, event);
@@ -90,7 +90,7 @@ public class WMessageHandler extends BmobIMMessageHandler {
                     info.getName(), msg.getContent(), "您有一条新消息", pendingIntent);
         } else {
             //直接发送消息事件
-            processCustomMessage(new IMMessage(msg), event.getFromUserInfo());
+            processCustomMessage(IMMessage.convert(msg), event.getFromUserInfo());
         }
     }
 
@@ -99,7 +99,6 @@ public class WMessageHandler extends BmobIMMessageHandler {
      * 处理自定义消息类型
      */
     private void processCustomMessage(IMMessage msg, BmobIMUserInfo info) {
-        msg.setFromUserInfo(info);
         MessageDispatcher.getInstance().dispatchMessage(msg);
     }
 }

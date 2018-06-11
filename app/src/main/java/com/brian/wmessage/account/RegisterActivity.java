@@ -1,4 +1,4 @@
-package com.brian.wmessage.login;
+package com.brian.wmessage.account;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,8 +22,6 @@ import com.brian.wmessage.entity.UserInfo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.LogInListener;
 
 /**
  * 注册界面
@@ -111,15 +109,18 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void doRegister(String username, String password) {
-        BmobHelper.getInstance().register(username, password, new LogInListener() {
+        BmobHelper.getInstance().register(username, password, new BmobHelper.OnLoginListener() {
+
             @Override
-            public void done(Object o, BmobException e) {
-                if (e == null) {
-                    MainActivity.startActivity(RegisterActivity.this);
-                    finish();
-                } else {
-                    ToastUtil.showMsg(e.getMessage() + "(" + e.getErrorCode() + ")");
-                }
+            public void onFinish(UserInfo userInfo) {
+                //登录成功
+                MainActivity.startActivity(RegisterActivity.this);
+                finish();
+            }
+
+            @Override
+            public void onError(int errorCode, String msg) {
+                ToastUtil.showMsg(msg + "(" + errorCode + ")");
             }
         });
     }

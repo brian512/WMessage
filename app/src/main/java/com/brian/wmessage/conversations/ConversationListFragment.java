@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.brian.common.base.BaseFragment;
 import com.brian.common.utils.HandlerUtil;
-import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.R;
 import com.brian.wmessage.entity.Conversation;
 import com.brian.wmessage.entity.IMMessage;
@@ -18,13 +17,7 @@ import com.brian.wmessage.entity.P2PConversation;
 import com.brian.wmessage.message.MessageDispatcher;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import cn.bmob.newim.BmobIM;
-import cn.bmob.newim.bean.BmobIMConversation;
-import cn.bmob.newim.bean.BmobIMMessage;
 
 /**
  * 回话列表
@@ -90,42 +83,17 @@ public class ConversationListFragment extends BaseFragment {
     private MessageDispatcher.IMessageListener mMessageListener = new MessageDispatcher.IMessageListener() {
         @Override
         public void onReceiveMessage(IMMessage message) {
-            BmobIMMessage bmobIMMessage = message.getBmobIMMessage();
-            LogUtil.d("mFromUserInfo=" + message.mFromUserInfo);
-            BmobIMConversation conversation = bmobIMMessage.getBmobIMConversation();
-            P2PConversation p2PConversation = new P2PConversation(conversation);
-            p2PConversation.setLastMsg(bmobIMMessage);
-            LogUtil.d("message=" + bmobIMMessage.toString());
+            P2PConversation p2PConversation = ConversationManager.getConversation(message);
+            p2PConversation.setLastMsg(message);
             mListAdapter.addOrUpdate(0, p2PConversation);
         }
     };
 
     /**
-     * 获取会话列表的数据：增加新朋友会话
+     * 获取会话列表的数据
      */
     private List<Conversation> getConversations() {
-        //添加会话
-        List<Conversation> conversationList = new ArrayList<>();
-        conversationList.clear();
-        //查询全部会话
-        List<BmobIMConversation> list = BmobIM.getInstance().loadAllConversation();
-        if (list != null && list.size() > 0) {
-            for (BmobIMConversation item : list) {
-                switch (item.getConversationType()) {
-                    case 1://私聊
-                        if (item.getMessages() != null && item.getMessages().size() > 0) {
-//                            LogUtil.d("conversation=" + GsonHelper.toJson(item));
-                            conversationList.add(new P2PConversation(item));
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        //重新排序
-        Collections.sort(conversationList);
-        return conversationList;
+        return ConversationManager.loadAllConversation();
     }
 
     @Override

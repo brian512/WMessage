@@ -24,6 +24,7 @@ import com.brian.common.views.TitleBar;
 import com.brian.common.views.recyclerview.RecyclerViewUtil;
 import com.brian.wmessage.R;
 import com.brian.wmessage.bmob.BmobHelper;
+import com.brian.wmessage.conversations.ConversationManager;
 import com.brian.wmessage.entity.IMMessage;
 import com.brian.wmessage.entity.P2PConversation;
 import com.brian.wmessage.message.MessageDispatcher;
@@ -32,12 +33,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMUserInfo;
-import cn.bmob.newim.core.BmobIMClient;
-import cn.bmob.newim.listener.MessageSendListener;
-import cn.bmob.newim.listener.MessagesQueryListener;
-import cn.bmob.v3.exception.BmobException;
 
 /**
  * 聊天页面
@@ -46,7 +41,6 @@ import cn.bmob.v3.exception.BmobException;
 public class ChatActivity extends BaseActivity {
 
     private static final String EXTRA_CONVERSATION = "conversation";
-    private static final String EXTRA_USERINFO = "user_info";
 
     @BindView(R.id.ll_chat)
     LinearLayout mRootLy;
@@ -67,25 +61,15 @@ public class ChatActivity extends BaseActivity {
 
     private ChatAdapter mChatAdapter;
 
-    private BmobIMUserInfo mUserInfo;
-
     private LinearLayoutManager mLayoutManager;
 
     private P2PConversation mConversation;
 
+    private ConversationManager mConversationManager;
+
     public static void startActivity(Context context, P2PConversation conversation) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(EXTRA_CONVERSATION, conversation);
-        if (!(context instanceof Activity)) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-        context.startActivity(intent);
-    }
-
-    public static void startActivity(Context context, BmobIMUserInfo userInfo, P2PConversation conversation) {
-        Intent intent = new Intent(context, ChatActivity.class);
-        intent.putExtra(EXTRA_CONVERSATION, conversation);
-        intent.putExtra(EXTRA_USERINFO, userInfo);
         if (!(context instanceof Activity)) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
@@ -99,10 +83,11 @@ public class ChatActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mConversation = (P2PConversation) getIntent().getSerializableExtra(EXTRA_CONVERSATION);
-        mUserInfo = (BmobIMUserInfo) getIntent().getSerializableExtra(EXTRA_USERINFO);
+        mConversationManager = new ConversationManager(mConversation);
 
         initUI();
         initListeners();
+
 
         queryMessages(true);
     }
@@ -185,30 +170,22 @@ public class ChatActivity extends BaseActivity {
     private MessageDispatcher.IMessageListener mMessageListener = new MessageDispatcher.IMessageListener() {
         @Override
         public void onReceiveMessage(IMMessage message) {
-            addMessage2Chat(message.getBmobIMMessage());
+            addMessage2Chat(message);
         }
     };
 
     /**
      * 添加消息到聊天界面中
      */
-    private void addMessage2Chat(BmobIMMessage message) {
-        LogUtil.d("message=" + message);
-        if (mConversation != null && mConversation.getConversation().getConversationId().equals(message.getConversationId()) //如果是当前会话的消息
-                && !message.isTransient()) {//并且不为暂态消息
+    private void addMessage2Chat(IMMessage message) {
+        LogUtil.d("message=" + message.conversationId);
+        if (mConversation != null && mConversation.getConversation().getConversationId().equals(message.conversationId) //如果是当前会话的消息
+                && !message.isTransient) {//并且不为暂态消息
             if (mChatAdapter.findPosition(message) < 0) {//如果未添加到界面中
                 mChatAdapter.addMessage(message);
                 scrollToBottom();
-                try {
-                    // 更新该会话下面的已读状态
-                    LogUtil.d("mConversation.getConversation().client=" + mConversation.getConversation().client);
-                    if (mConversation.getConversation().client == null) {
-                        mConversation.getConversation().client = BmobIMClient.getInstance();
-                    }
-                    mConversation.getConversation().updateReceiveStatus(message);
-                } catch (Exception e) {
-                    LogUtil.printError(e);
-                }
+
+                mConversationManager.updateReceiveStatus(message);
             }
         } else {
             LogUtil.d("不是与当前聊天对象的消息");
@@ -234,20 +211,15 @@ public class ChatActivity extends BaseActivity {
             ToastUtil.showMsg("请输入内容");
             return;
         }
-        MessageSendListener listener = new MessageSendListener() {
+        MessageSendHelper.OnMessageSendListener listener = new MessageSendHelper.OnMessageSendListener() {
             @Override
-            public void onStart(BmobIMMessage message) {
-                super.onStart(message);
-                mChatAdapter.addMessage(message);
-                scrollToBottom();
+            public void onStart(IMMessage message) {
+                MessageDispatcher.getInstance().dispatchMessage(message);
             }
 
             @Override
-            public void done(BmobIMMessage message, BmobException e) {
+            public void onFinish(IMMessage message, int status) {
                 mChatAdapter.updateMessage(message);
-                if (e != null) {
-                    LogUtil.d(e.getMessage());
-                }
             }
         };
         MessageSendHelper.getInstance().sendTextMessage(mConversation, text, listener);
@@ -257,24 +229,25 @@ public class ChatActivity extends BaseActivity {
     /**
      * 首次加载，可设置msg为null，下拉刷新的时候，默认取消息表的第一个msg作为刷新的起始时间点，默认按照消息时间的降序排列
      */
-    public void queryMessages(boolean isInit) {
-        final BmobIMMessage msg = isInit ? null : mChatAdapter.getFirstMessage();
-        mConversation.getConversation().queryMessages(msg, 20, new MessagesQueryListener() {
+    public void queryMessages(final boolean isInit) {
+        final IMMessage msg = isInit ? null : mChatAdapter.getFirstMessage();
+        mConversationManager.queryMessages(msg, new ConversationManager.OnMessageQueryListener() {
             @Override
-            public void done(List<BmobIMMessage> list, BmobException e) {
+            public void onFinish(List<IMMessage> list) {
                 mRefreshLayout.setRefreshing(false);
-                if (e == null) {
-                    if (null != list && list.size() > 0) {
-                        mChatAdapter.addMessages(list);
-                        if (msg == null) {
-                            scrollToBottom();
-                        }
-                    } else {
-                        mRefreshLayout.setEnabled(false); // 已经加载完毕
+                if (null != list && list.size() > 0) {
+                    mChatAdapter.addMessages(list);
+                    if (isInit) {
+                        scrollToBottom();
                     }
                 } else {
-                    LogUtil.d(e.getMessage() + "(" + e.getErrorCode() + ")");
+                    mRefreshLayout.setEnabled(false); // 已经加载完毕
                 }
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                ToastUtil.showMsg(message);
             }
         });
     }

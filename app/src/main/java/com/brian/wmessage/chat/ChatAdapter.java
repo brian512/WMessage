@@ -1,13 +1,15 @@
 package com.brian.wmessage.chat;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.ViewGroup;
+
+import com.brian.wmessage.entity.IMMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMMessageType;
 import cn.bmob.v3.BmobUser;
 
 /**
@@ -39,7 +41,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     private static final long TIME_INTERVAL = 10 * 60 * 1000;
 
-    private List<BmobIMMessage> mMessageList = new ArrayList<>();
+    private List<IMMessage> mMessageList = new ArrayList<>();
 
     private String currentUid = "";
 
@@ -51,7 +53,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public int findPosition(BmobIMMessage message) {
+    public int findPosition(IMMessage message) {
         int index = this.getCount();
         int position = -1;
         while (index-- > 0) {
@@ -79,42 +81,37 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return this.mMessageList == null ? 0 : this.mMessageList.size();
     }
 
-    public void addMessages(List<BmobIMMessage> messages) {
+    public void addMessages(List<IMMessage> messages) {
         mMessageList.addAll(0, messages);
         notifyItemRangeInserted(0, messages.size());
     }
 
-    public void addMessage(BmobIMMessage message) {
+    public void addMessage(IMMessage message) {
         mMessageList.add(message);
         notifyItemInserted(mMessageList.size()-1);
     }
 
-    public void updateMessage(BmobIMMessage message) {
+    public void updateMessage(IMMessage message) {
         int index = mMessageList.indexOf(message);
         notifyItemChanged(index);
     }
 
     /**
      * 获取消息
-     *
-     * @param position
-     * @return
      */
-    public BmobIMMessage getItem(int position) {
+    public IMMessage getItem(int position) {
         return this.mMessageList == null ? null : (position >= this.mMessageList.size() ? null : this.mMessageList.get(position));
     }
 
     /**
      * 移除消息
-     *
-     * @param position
      */
     public void remove(int position) {
         mMessageList.remove(position);
         notifyDataSetChanged();
     }
 
-    public BmobIMMessage getFirstMessage() {
+    public IMMessage getFirstMessage() {
         if (null != mMessageList && mMessageList.size() > 0) {
             return mMessageList.get(0);
         } else {
@@ -123,30 +120,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == TYPE_SEND_TXT) {
-            return new SendTextHolder(parent.getContext(), parent, onRecyclerViewListener);
-//        } else if (viewType == TYPE_SEND_IMAGE) {
-//            return new SendImageHolder(parent.getContext(), parent,c,onRecyclerViewListener);
-//        } else if (viewType == TYPE_SEND_LOCATION) {
-//            return new SendLocationHolder(parent.getContext(), parent,c,onRecyclerViewListener);
-//        } else if (viewType == TYPE_SEND_VOICE) {
-//            return new SendVoiceHolder(parent.getContext(), parent,c,onRecyclerViewListener);
+            return new SendTextHolder(parent.getContext(), parent);
         } else if (viewType == TYPE_RECEIVER_TXT) {
-            return new ReceiveTextHolder(parent.getContext(), parent, onRecyclerViewListener);
-//        } else if (viewType == TYPE_RECEIVER_IMAGE) {
-//            return new ReceiveImageHolder(parent.getContext(), parent,onRecyclerViewListener);
-//        } else if (viewType == TYPE_RECEIVER_LOCATION) {
-//            return new ReceiveLocationHolder(parent.getContext(), parent,onRecyclerViewListener);
-//        } else if (viewType == TYPE_RECEIVER_VOICE) {
-//            return new ReceiveVoiceHolder(parent.getContext(), parent,onRecyclerViewListener);
-//        } else if (viewType == TYPE_SEND_VIDEO) {
-//            return new SendVideoHolder(parent.getContext(), parent,c,onRecyclerViewListener);
-//        } else if (viewType == TYPE_RECEIVER_VIDEO) {
-//            return new ReceiveVideoHolder(parent.getContext(), parent,onRecyclerViewListener);
-        } else if (viewType == TYPE_AGREE) {
-            return new AgreeHolder(parent.getContext(), parent, onRecyclerViewListener);
-        } else {//开发者自定义的其他类型，可自行处理
+            return new ReceiveTextHolder(parent.getContext(), parent);
+        } else {
             return null;
         }
     }
@@ -156,44 +135,24 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ((BaseViewHolder) holder).bindData(mMessageList.get(position));
         if (holder instanceof ReceiveTextHolder) {
             ((ReceiveTextHolder) holder).showTime(shouldShowTime(position));
-//        } else if (holder instanceof ReceiveImageHolder) {
-//            ((ReceiveImageHolder)holder).showTime(shouldShowTime(position));
-//        }else if (holder instanceof ReceiveLocationHolder) {
-//            ((ReceiveLocationHolder)holder).showTime(shouldShowTime(position));
-//        }else if (holder instanceof ReceiveVoiceHolder) {
-//            ((ReceiveVoiceHolder)holder).showTime(shouldShowTime(position));
         } else if (holder instanceof SendTextHolder) {
             ((SendTextHolder) holder).showTime(shouldShowTime(position));
-//        }else if (holder instanceof SendImageHolder) {
-//            ((SendImageHolder)holder).showTime(shouldShowTime(position));
-//        }else if (holder instanceof SendLocationHolder) {
-//            ((SendLocationHolder)holder).showTime(shouldShowTime(position));
-//        }else if (holder instanceof SendVoiceHolder) {
-//            ((SendVoiceHolder)holder).showTime(shouldShowTime(position));
-//        }else if (holder instanceof SendVideoHolder) {//随便模拟的视频类型
-//            ((SendVideoHolder)holder).showTime(shouldShowTime(position));
-//        }else if (holder instanceof ReceiveVideoHolder) {
-//            ((ReceiveVideoHolder)holder).showTime(shouldShowTime(position));
-        } else if (holder instanceof AgreeHolder) {//同意添加好友成功后的消息
-            ((AgreeHolder) holder).showTime(shouldShowTime(position));
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        BmobIMMessage message = mMessageList.get(position);
-        if (message.getMsgType().equals(BmobIMMessageType.IMAGE.getType())) {
-            return message.getFromId().equals(currentUid) ? TYPE_SEND_IMAGE : TYPE_RECEIVER_IMAGE;
-        } else if (message.getMsgType().equals(BmobIMMessageType.LOCATION.getType())) {
-            return message.getFromId().equals(currentUid) ? TYPE_SEND_LOCATION : TYPE_RECEIVER_LOCATION;
-        } else if (message.getMsgType().equals(BmobIMMessageType.VOICE.getType())) {
-            return message.getFromId().equals(currentUid) ? TYPE_SEND_VOICE : TYPE_RECEIVER_VOICE;
-        } else if (message.getMsgType().equals(BmobIMMessageType.TEXT.getType())) {
-            return message.getFromId().equals(currentUid) ? TYPE_SEND_TXT : TYPE_RECEIVER_TXT;
-        } else if (message.getMsgType().equals(BmobIMMessageType.VIDEO.getType())) {
-            return message.getFromId().equals(currentUid) ? TYPE_SEND_VIDEO : TYPE_RECEIVER_VIDEO;
-        } else if (message.getMsgType().equals("agree")) {//显示欢迎
-            return TYPE_AGREE;
+        IMMessage message = mMessageList.get(position);
+        if (message.msgType == IMMessage.MSG_TYPE_IMAGE) {
+            return TextUtils.equals(message.fromId, currentUid) ? TYPE_SEND_IMAGE : TYPE_RECEIVER_IMAGE;
+        } else if (message.msgType == IMMessage.MSG_TYPE_LOCATION) {
+            return TextUtils.equals(message.fromId, currentUid) ? TYPE_SEND_LOCATION : TYPE_RECEIVER_LOCATION;
+        } else if (message.msgType == IMMessage.MSG_TYPE_AUDIO) {
+            return TextUtils.equals(message.fromId, currentUid) ? TYPE_SEND_VOICE : TYPE_RECEIVER_VOICE;
+        } else if (message.msgType == IMMessage.MSG_TYPE_TEXT) {
+            return TextUtils.equals(message.fromId, currentUid) ? TYPE_SEND_TXT : TYPE_RECEIVER_TXT;
+        } else if (message.msgType == IMMessage.MSG_TYPE_VIDEO) {
+            return TextUtils.equals(message.fromId, currentUid) ? TYPE_SEND_VIDEO : TYPE_RECEIVER_VIDEO;
         } else {
             return -1;
         }
@@ -204,18 +163,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mMessageList.size();
     }
 
-    private OnRecyclerViewListener onRecyclerViewListener;
-
-    public void setOnRecyclerViewListener(OnRecyclerViewListener onRecyclerViewListener) {
-        this.onRecyclerViewListener = onRecyclerViewListener;
-    }
-
     private boolean shouldShowTime(int position) {
         if (position == 0) {
             return true;
         }
-        long lastTime = mMessageList.get(position - 1).getCreateTime();
-        long curTime = mMessageList.get(position).getCreateTime();
+        long lastTime = mMessageList.get(position - 1).createTime;
+        long curTime = mMessageList.get(position).createTime;
         return curTime - lastTime > TIME_INTERVAL;
     }
 }

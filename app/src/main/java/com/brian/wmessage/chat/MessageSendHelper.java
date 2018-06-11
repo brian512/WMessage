@@ -30,6 +30,14 @@ public class MessageSendHelper {
         return sMessageSendHelper;
     }
 
+    public interface OnMessageSendListener {
+        int STATUS_DONE = 0;
+        int STATUS_ERROR = -1;
+
+        void onStart(IMMessage message);
+        void onFinish(IMMessage message, int status);
+    }
+
     /**
      * 消息发送监听器
      */
@@ -55,23 +63,21 @@ public class MessageSendHelper {
     };
 
 
-    public BmobIMTextMessage sendTextMessage(P2PConversation conversation, String text) {
-        BmobIMTextMessage msg = new BmobIMTextMessage();
-        msg.setContent(text);
+    public void sendTextMessage(P2PConversation conversation, String text) {
+        BmobIMTextMessage textMessage = new BmobIMTextMessage();
+        textMessage.setContent(text);
         //可随意设置额外信息
 //        Map<String, Object> map = new HashMap<>();
 //        map.put("level", "1");
 //        msg.setExtraMap(map);
 //        msg.setExtra("OK");
-        sendMessage(conversation, new IMMessage(msg));
-        return msg;
+        sendMessage(conversation, textMessage);
     }
 
-    public BmobIMTextMessage sendTextMessage(P2PConversation conversation, String text, MessageSendListener listener) {
-        BmobIMTextMessage msg = new BmobIMTextMessage();
-        msg.setContent(text);
-        sendMessage(conversation, new IMMessage(msg), listener);
-        return msg;
+    public void sendTextMessage(P2PConversation conversation, String text, OnMessageSendListener listener) {
+        BmobIMTextMessage textMessage = new BmobIMTextMessage();
+        textMessage.setContent(text);
+        sendMessage(conversation, textMessage, listener);
     }
 
     /**
@@ -79,23 +85,23 @@ public class MessageSendHelper {
      */
     public void sendVoiceMessage(P2PConversation conversation, String local) {
         BmobIMAudioMessage audioMsg = new BmobIMAudioMessage(local);
-        sendMessage(conversation, new IMMessage(audioMsg));
+        sendMessage(conversation, audioMsg);
     }
 
     /**
      * 发送图片消息
      */
     public void sendImageMessage(P2PConversation conversation, String local) {
-        BmobIMImageMessage audioMsg = new BmobIMImageMessage(local);
-        sendMessage(conversation, new IMMessage(audioMsg));
+        BmobIMImageMessage imageMessage = new BmobIMImageMessage(local);
+        sendMessage(conversation, imageMessage);
     }
 
     /**
      * 发送视频消息
      */
     public void sendVideoMessage(P2PConversation conversation, String local) {
-        BmobIMVideoMessage audioMsg = new BmobIMVideoMessage(local);
-        sendMessage(conversation, new IMMessage(audioMsg));
+        BmobIMVideoMessage videoMessage = new BmobIMVideoMessage(local);
+        sendMessage(conversation, videoMessage);
     }
 
     /**
@@ -103,17 +109,83 @@ public class MessageSendHelper {
      */
     public void sendVideoMessage(P2PConversation conversation, String address, double latitude, double longitude) {
         BmobIMLocationMessage audioMsg = new BmobIMLocationMessage(address, latitude, longitude);
-        sendMessage(conversation, new IMMessage(audioMsg));
+        sendMessage(conversation, audioMsg);
     }
 
-    private void sendMessage(P2PConversation conversation, IMMessage message) {
-        sendMessage(conversation, message, mMessageSendListener);
+    private void sendMessage(P2PConversation conversation, BmobIMMessage message) {
+        sendMessage(conversation, message, null);
     }
 
-    public void sendMessage(P2PConversation conversation, IMMessage message, MessageSendListener listener) {
+    public void sendMessage(P2PConversation conversation, BmobIMMessage bmobIMMessage, final OnMessageSendListener listener) {
+        final IMMessage message = IMMessage.convert(bmobIMMessage);
         BmobIMConversation conversationManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversation.getConversation());
-        conversationManager.sendMessage(message.mMessage, listener);
-        MessageDispatcher.getInstance().dispatchMessage(message);
+        conversationManager.sendMessage(bmobIMMessage, new MessageSendListener() {
+
+            @Override
+            public void onProgress(int value) {
+                super.onProgress(value);
+                //文件类型的消息才有进度值
+                LogUtil.i("onProgress：" + value);
+            }
+
+            @Override
+            public void onStart(BmobIMMessage msg) {
+                super.onStart(msg);
+                LogUtil.i("msg：" + msg);
+                message.updateData(msg);
+                if (listener != null) {
+                    listener.onStart(message);
+                }
+            }
+
+            @Override
+            public void done(BmobIMMessage msg, BmobException e) {
+                LogUtil.i("msg：" + msg);
+                message.updateData(msg);
+                if (listener != null) {
+                    if (e == null) {
+                        listener.onFinish(message, OnMessageSendListener.STATUS_DONE);
+                    } else {
+                        listener.onFinish(message, OnMessageSendListener.STATUS_ERROR);
+                    }
+                }
+            }
+        });
     }
 
+    public void resendMessage(BmobIMConversation conversation, final IMMessage message, final OnMessageSendListener listener) {
+        BmobIMConversation conversationManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversation);
+        conversationManager.sendMessage(message.mMessage, new MessageSendListener() {
+
+            @Override
+            public void onProgress(int value) {
+                super.onProgress(value);
+                //文件类型的消息才有进度值
+                LogUtil.i("onProgress：" + value);
+            }
+
+            @Override
+            public void onStart(BmobIMMessage msg) {
+                super.onStart(msg);
+                LogUtil.i("msg：" + msg);
+                message.updateData(msg);
+                if (listener != null) {
+                    listener.onStart(message);
+                }
+            }
+
+            @Override
+            public void done(BmobIMMessage msg, BmobException e) {
+                LogUtil.i("msg：" + msg);
+                message.updateData(msg);
+                if (listener != null) {
+                    if (e == null) {
+                        listener.onFinish(message, OnMessageSendListener.STATUS_DONE);
+                    } else {
+                        listener.onFinish(message, OnMessageSendListener.STATUS_ERROR);
+                    }
+                }
+            }
+        });
+    }
 }

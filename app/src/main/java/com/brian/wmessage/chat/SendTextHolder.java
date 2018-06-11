@@ -7,22 +7,19 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.R;
+import com.brian.wmessage.entity.IMMessage;
 import com.brian.wmessage.entity.UserInfo;
 
 import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
-import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMSendStatus;
-import cn.bmob.newim.bean.BmobIMUserInfo;
 
 /**
  * 发送的文本类型
  * @author huamm
  */
-public class SendTextHolder extends BaseViewHolder implements View.OnClickListener, View.OnLongClickListener {
+public class SendTextHolder extends BaseViewHolder<IMMessage> {
 
     @BindView(R.id.iv_avatar)
     protected ImageView mAvatarIv;
@@ -37,26 +34,29 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
     @BindView(R.id.progress_load)
     protected ProgressBar mSendProgressBar;
 
-    public SendTextHolder(Context context, ViewGroup root, OnRecyclerViewListener listener) {
-        super(context, root, R.layout.chat_sent_message_item, listener);
+    private OnResendClickListener mResendClickListener;
+
+    public SendTextHolder(Context context, ViewGroup root) {
+        super(context, root, R.layout.chat_sent_message_item);
+    }
+
+    public void setResendClickListener(OnResendClickListener listener) {
+        mResendClickListener = listener;
     }
 
     @Override
-    public void bindData(Object o) {
-        final BmobIMMessage message = (BmobIMMessage) o;
+    public void bindData(final IMMessage message) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        final BmobIMUserInfo info = message.getBmobIMUserInfo();
-        UserInfo.showHead(mAvatarIv, info != null ? info.getAvatar() : "0");
-        String time = dateFormat.format(message.getCreateTime());
-        String content = message.getContent();
-        mMessageTv.setText(content);
+        UserInfo.showHead(mAvatarIv, message.mUserInfo != null ? message.mUserInfo.avatar : "0");
+        String time = dateFormat.format(message.createTime);
+        mMessageTv.setText(message.content);
         mTimeTv.setText(time);
 
-        int status = message.getSendStatus();
-        if (status == BmobIMSendStatus.SEND_FAILED.getStatus()) {
+        int status = message.sendStatus;
+        if (status == IMMessage.STATUS_SEND_FAILED) {
             mResendIv.setVisibility(View.VISIBLE);
             mSendProgressBar.setVisibility(View.GONE);
-        } else if (status == BmobIMSendStatus.SENDING.getStatus()) {
+        } else if (status == IMMessage.STATUS_SENDING) {
             mResendIv.setVisibility(View.GONE);
             mSendProgressBar.setVisibility(View.VISIBLE);
         } else {
@@ -64,64 +64,45 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
             mSendProgressBar.setVisibility(View.GONE);
         }
 
-        mMessageTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogUtil.d("点击" + message.getContent());
-                if (onRecyclerViewListener != null) {
-                    onRecyclerViewListener.onItemClick(getAdapterPosition());
-                }
-            }
-        });
-
-        mMessageTv.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (onRecyclerViewListener != null) {
-                    onRecyclerViewListener.onItemLongClick(getAdapterPosition());
-                }
-                return true;
-            }
-        });
-
-        mAvatarIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogUtil.d("点击" + info.getName() + "的头像");
-            }
-        });
-
         //重发
         mResendIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                c.resendMessage(message, new MessageSendListener() {
-//                    @Override
-//                    public void onStart(BmobIMMessage msg) {
-//                        mSendProgressBar.setVisibility(View.VISIBLE);
-//                        mResendIv.setVisibility(View.GONE);
-//                        mSendStatusTv.setVisibility(View.INVISIBLE);
-//                    }
-//
-//                    @Override
-//                    public void done(BmobIMMessage msg, BmobException e) {
-//                        if (e == null) {
-//                            mSendStatusTv.setVisibility(View.VISIBLE);
-//                            mSendStatusTv.setText("已发送");
-//                            mResendIv.setVisibility(View.GONE);
-//                            mSendProgressBar.setVisibility(View.GONE);
-//                        } else {
-//                            mResendIv.setVisibility(View.VISIBLE);
-//                            mSendProgressBar.setVisibility(View.GONE);
-//                            mSendStatusTv.setVisibility(View.INVISIBLE);
-//                        }
-//                    }
-//                });
+                if (mResendClickListener != null) {
+                    mResendClickListener.onClick();
+                }
+                // 后续可将重试逻辑放在业务层，这里只是viewholder
+                MessageSendHelper.getInstance().resendMessage(message.getBmobIMMessage().getBmobIMConversation(), message, new MessageSendHelper.OnMessageSendListener() {
+                    @Override
+                    public void onStart(IMMessage message) {
+                        mSendProgressBar.setVisibility(View.VISIBLE);
+                        mResendIv.setVisibility(View.GONE);
+                        mSendStatusTv.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onFinish(IMMessage message, int status) {
+                        if (status == MessageSendHelper.OnMessageSendListener.STATUS_DONE) {
+                            mSendStatusTv.setVisibility(View.VISIBLE);
+                            mSendStatusTv.setText("已发送");
+                            mResendIv.setVisibility(View.GONE);
+                            mSendProgressBar.setVisibility(View.GONE);
+                        } else {
+                            mResendIv.setVisibility(View.VISIBLE);
+                            mSendProgressBar.setVisibility(View.GONE);
+                            mSendStatusTv.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                });
             }
         });
     }
 
     public void showTime(boolean isShow) {
         mTimeTv.setVisibility(isShow ? View.VISIBLE : View.GONE);
+    }
+
+    public interface OnResendClickListener {
+        void onClick();
     }
 }
