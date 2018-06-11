@@ -11,9 +11,13 @@
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#20000000"
-        android:padding="5dp"
-        android:textSize="14sp" />
+        android:background="@drawable/chat_time_bg"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textColor="@color/com_text_black"
+        android:textSize="12sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,8 +27,8 @@
 
         <ImageView
             android:id="@+id/iv_avatar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:scaleType="fitXY"
@@ -39,14 +43,14 @@
             android:background="@drawable/chat_right_qp"
             android:gravity="start|center"
             android:lineSpacingExtra="3dp"
-            android:maxWidth="225.0dip"
+            android:maxWidth="225dp"
             android:minHeight="40dp"
-            android:minWidth="80dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="15dp"
             android:paddingBottom="8dp"
-            android:paddingStart="15dp"
-            android:paddingEnd="30dp"
             android:paddingTop="8dp"
-            android:textColor="@color/com_text_white" />
+            android:textSize="16sp"
+            android:textColor="@color/seventy_transparency_black" />
 
         <ImageView
             android:id="@+id/iv_fail_resend"
@@ -56,7 +60,7 @@
             android:layout_marginEnd="10dp"
             android:layout_toStartOf="@id/tv_message"
             android:scaleType="fitCenter"
-            android:src="@drawable/btn_chat_fail_resend"
+            android:src="@drawable/chat_fail_resend_btn_selector"
             android:visibility="invisible" />
 
         <TextView

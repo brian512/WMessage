@@ -1,4 +1,4 @@
-package com.brian.wmessage;
+package com.brian.wmessage.account;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brian.common.base.BaseFragment;
+import com.brian.wmessage.R;
 import com.brian.wmessage.bmob.BmobHelper;
 import com.brian.wmessage.entity.UserInfo;
 import com.brian.wmessage.account.LoginActivity;
@@ -19,7 +20,7 @@ import butterknife.ButterKnife;
 /**
  * @author huamm
  */
-public class SetFragment extends BaseFragment {
+public class ProfileFragment extends BaseFragment {
 
     @BindView(R.id.iv_avatar)
     ImageView mHeadView;

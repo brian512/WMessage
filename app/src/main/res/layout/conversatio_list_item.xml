@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="70dp"
     >
 
     <ImageView
@@ -10,10 +10,10 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerVertical="true"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="12dp"
         android:src="@mipmap/default_head_1" />
 
     <TextView
@@ -29,7 +29,7 @@
         android:text="昵称很长很长很长很长很长很长很长很长"
         android:textColor="@color/com_text_black"
         android:textSize="18sp"
-        android:textStyle="bold" />
+         />
 
     <TextView
         android:id="@+id/recent_item_message"
@@ -54,7 +54,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
         android:text="12:30"
-        android:textColor="@color/com_text_black"
+        android:textColor="@color/seventy_transparency_black"
         android:textSize="12sp" />
 
 
@@ -79,9 +79,8 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
+        android:layout_height="0.3dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="70dp"
-        android:background="@color/forty_percent_transparency_black" />
+        android:background="@color/twenty_percent_transparency_black" />
 
 </RelativeLayout>

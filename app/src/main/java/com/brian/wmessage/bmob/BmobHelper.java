@@ -6,10 +6,10 @@ import android.text.TextUtils;
 import com.brian.common.base.IBaseRequestDataListener;
 import com.brian.common.utils.LogUtil;
 import com.brian.common.utils.RandomUtil;
+import com.brian.wmessage.chat.MessageSendHelper;
 import com.brian.wmessage.contact.UserListManager;
 import com.brian.wmessage.entity.FriendInfo;
 import com.brian.wmessage.entity.UserInfo;
-import com.brian.wmessage.message.WMessageHandler;
 import com.github.promeg.pinyinhelper.Pinyin;
 
 import java.util.ArrayList;
@@ -32,17 +32,24 @@ import cn.bmob.v3.listener.SaveListener;
  */
 public class BmobHelper {
 
-    private static BmobHelper sInstance = new BmobHelper();
+    private static BmobHelper sInstance;
 
     private BmobHelper() {}
 
     public static BmobHelper getInstance() {
+        if (sInstance == null) {
+            synchronized (MessageSendHelper.class) {
+                if (sInstance == null) {
+                    sInstance = new BmobHelper();
+                }
+            }
+        }
         return sInstance;
     }
 
     public void init(Context context) {
         BmobIM.init(context);
-        BmobIM.registerDefaultMessageHandler(new WMessageHandler());
+        BmobIM.registerDefaultMessageHandler(new BmobMessageHandler());
     }
 
     public boolean isMySelef(String userId) {

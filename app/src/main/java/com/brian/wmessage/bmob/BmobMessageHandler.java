@@ -1,4 +1,4 @@
-package com.brian.wmessage.message;
+package com.brian.wmessage.bmob;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.MainActivity;
 import com.brian.wmessage.R;
 import com.brian.wmessage.entity.IMMessage;
+import com.brian.wmessage.message.MessageDispatcher;
 
 import java.util.List;
 import java.util.Map;
@@ -24,10 +25,10 @@ import cn.bmob.newim.listener.BmobIMMessageHandler;
 import cn.bmob.newim.notification.BmobNotificationManager;
 
 /**
- * 消息接收处理
+ * Bmob消息接收处理
  * @author huamm
  */
-public class WMessageHandler extends BmobIMMessageHandler {
+public class BmobMessageHandler extends BmobIMMessageHandler {
 
 
     @Override

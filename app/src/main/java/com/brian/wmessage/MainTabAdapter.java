@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.brian.wmessage.account.ProfileFragment;
 import com.brian.wmessage.contact.ContactFragment;
 import com.brian.wmessage.conversations.ConversationListFragment;
 
@@ -46,7 +47,7 @@ public class MainTabAdapter extends FragmentPagerAdapter {
                 fragment = new ContactFragment();
                 break;
             case 2:
-                fragment = new SetFragment();
+                fragment = new ProfileFragment();
                 break;
         }
         

@@ -22,11 +22,18 @@ import cn.bmob.v3.exception.BmobException;
  */
 public class MessageSendHelper {
 
-    private static MessageSendHelper sMessageSendHelper = new MessageSendHelper();
+    private static MessageSendHelper sMessageSendHelper;
 
     private MessageSendHelper() {}
 
     public static MessageSendHelper getInstance() {
+        if (sMessageSendHelper == null) {
+            synchronized (MessageSendHelper.class) {
+                if (sMessageSendHelper == null) {
+                    sMessageSendHelper = new MessageSendHelper();
+                }
+            }
+        }
         return sMessageSendHelper;
     }
 

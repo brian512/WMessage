@@ -53,13 +53,14 @@
             android:layout_marginStart="6dp"
             android:layout_weight="1.0"
             android:gravity="start|center"
-            android:hint="请输入新消息"
             android:imeOptions="flagNoExtractUi"
             android:lineSpacingExtra="1dp"
             android:minHeight="40dp"
             android:maxLines="4"
             android:maxLength="200"
-            android:padding="5dp"
+            android:paddingTop="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:textSize="18sp" />
 
         <TextView
@@ -67,7 +68,7 @@
             android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/chat_send_bg"
             android:textColor="@color/com_text_white"
             android:gravity="center"
             android:text="发送"

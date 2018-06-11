@@ -29,7 +29,7 @@
             android:layout_height="39dp"
             android:layout_margin="10dp"
             android:layout_marginEnd="11dp"
-            android:background="@drawable/btn_login_selector"
+            android:background="@drawable/login_btn_bg_selector"
             android:text="搜索"
             android:textSize="14sp" />
     </LinearLayout>

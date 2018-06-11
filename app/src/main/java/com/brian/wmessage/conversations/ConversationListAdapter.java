@@ -112,7 +112,7 @@ public class ConversationListAdapter extends BaseRecyclerAdapter<Conversation, C
                 - Integer.parseInt(sdf.format(otherDay));
         switch (temp) {
             case 0:
-                result = "今天 " + getHourAndMin(clearTime);
+                result = getHourAndMin(clearTime);
                 break;
             case 1:
                 result = "昨天 " + getHourAndMin(clearTime);

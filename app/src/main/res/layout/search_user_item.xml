@@ -37,7 +37,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="11dp"
-            android:background="@drawable/btn_login_selector"
+            android:background="@drawable/login_btn_bg_selector"
             android:text="查看"
             android:textColor="@color/com_text_white"
             android:textSize="14sp" />

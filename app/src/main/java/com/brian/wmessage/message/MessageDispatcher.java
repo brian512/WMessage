@@ -1,5 +1,6 @@
 package com.brian.wmessage.message;
 
+import com.brian.wmessage.chat.MessageSendHelper;
 import com.brian.wmessage.entity.IMMessage;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  */
 public class MessageDispatcher {
 
-    private static final MessageDispatcher sInstance = new MessageDispatcher();
+    private static MessageDispatcher sInstance;
 
     private ArrayList<IMessageListener> mMessageListeners;
 
@@ -20,23 +21,30 @@ public class MessageDispatcher {
     }
 
     public static MessageDispatcher getInstance() {
+        if (sInstance == null) {
+            synchronized (MessageSendHelper.class) {
+                if (sInstance == null) {
+                    sInstance = new MessageDispatcher();
+                }
+            }
+        }
         return sInstance;
     }
 
     public void registerListener(IMessageListener listener) {
-        synchronized (sInstance) {
+        synchronized (MessageDispatcher.class) {
             mMessageListeners.add(listener);
         }
     }
 
     public void unregisterListener(IMessageListener listener) {
-        synchronized (sInstance) {
+        synchronized (MessageDispatcher.class) {
             mMessageListeners.remove(listener);
         }
     }
 
     public void dispatchMessage(IMMessage message) {
-        synchronized (sInstance) {
+        synchronized (MessageDispatcher.class) {
             for (IMessageListener listener : mMessageListeners) {
                 listener.onReceiveMessage(message);
             }
