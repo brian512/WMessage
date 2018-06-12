@@ -1,14 +1,14 @@
-WMessage（微聊）是一款简单的IM即时聊天应用，https://fir.im/wmessage
+[WMessage（微聊）](https://fir.im/wmessage)是一款简单的IM即时聊天应用
 
 ![https://fir.im/wmessage](art/fir_im_code_image.png)
 
 --------------
-###项目介绍
+### 项目介绍
 
  - 由于没有服务器，暂时使用的[Bmob](https://www.bmob.cn/)的IM数据服务
 
 
-####已实现的功能：
+#### 已实现的功能：
  - 帐号注册，登录，退出
  - 聊天列表
  - 用户列表
@@ -16,7 +16,7 @@ WMessage（微聊）是一款简单的IM即时聊天应用，https://fir.im/wmes
  - 新消息提醒
 
 
-####代码结构
+#### 代码结构
 ```
 WMessage
     |——app      // 项目主体
@@ -40,7 +40,7 @@ app
 
 
 ---
-####TODO LIST
+#### TODO LIST
 
  功能：
  - 更多消息类型支持，图片，语音，视频，网页等
@@ -61,7 +61,7 @@ app
 
 --------
 
-####遇到的问题：
+#### 遇到的问题：
  - Bmob聊天数据不完整
 ```
 {
@@ -77,8 +77,9 @@ app
     "fromId":"0ad9727ce7",
     "toId":"842e3cbb16",
 }
-```
+
 会话icon数据经常为空、会话title为fromId，需要根据conversationId（与fromId同）填充数据
+```
 
  - 接口异常类型没有区分
 例如，登录错误时，并没有区分是用户不存在 还是密码错误，异或是其他错误
