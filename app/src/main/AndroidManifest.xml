@@ -32,6 +32,7 @@
         <meta-data
             android:name="Bmob_APP_KEY"
             android:value="724940754de2a54d2b5b0c73a09facbb"/>
+        <!--不支持动态设置key-->
 
         <receiver android:name="cn.bmob.newim.core.ConnectChangeReceiver">
             <intent-filter>

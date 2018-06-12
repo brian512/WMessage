@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.brian.common.utils.TimeUtil;
 import com.brian.wmessage.R;
 import com.brian.wmessage.entity.IMMessage;
 import com.brian.wmessage.entity.UserInfo;
@@ -46,11 +47,9 @@ public class SendTextHolder extends BaseViewHolder<IMMessage> {
 
     @Override
     public void bindData(final IMMessage message) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         UserInfo.showHead(mAvatarIv, message.mUserInfo != null ? message.mUserInfo.avatar : "0");
-        String time = dateFormat.format(message.createTime);
         mMessageTv.setText(message.content);
-        mTimeTv.setText(time);
+        mTimeTv.setText(TimeUtil.convTimeForChat(message.createTime));
 
         int status = message.sendStatus;
         if (status == IMMessage.STATUS_SEND_FAILED) {

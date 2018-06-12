@@ -107,11 +107,11 @@
 
 
     <string name="time_current">刚刚</string>
-    <string name="time_before_second">秒前</string>
-    <string name="time_before_minute">分钟前</string>
-    <string name="time_before_hours">小时前</string>
-    <string name="time_before_days">天前</string>
-    <string name="time_yesterday">昨天</string>
+    <string name="time_before_second">%d秒前</string>
+    <string name="time_before_minute">%d分钟前</string>
+    <string name="time_before_hours">%d小时前</string>
+    <string name="time_before_days">%d天前</string>
+    <string name="time_yesterday">昨天 %s</string>
 
     <!--上拉加载-->
     <string name="refresh_footer_pullup">上拉加载更多</string>

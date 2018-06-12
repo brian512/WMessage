@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.brian.common.utils.TimeUtil;
 import com.brian.wmessage.R;
 import com.brian.wmessage.contact.UserListManager;
 import com.brian.wmessage.entity.IMMessage;
@@ -37,8 +38,7 @@ public class ReceiveTextHolder extends BaseViewHolder<IMMessage> {
 
     @Override
     public void bindData(final IMMessage message) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
-        String time = dateFormat.format(message.createTime);
+        String time = TimeUtil.convTimeForChat(message.createTime);
         mTimeTv.setText(time);
         if (message.mUserInfo != null && !TextUtils.isEmpty(message.mUserInfo.avatar)) {
             UserInfo.showHead(mAvatarIv, message.mUserInfo.avatar);

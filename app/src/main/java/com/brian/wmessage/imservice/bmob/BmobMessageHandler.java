@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 
 import com.brian.common.tools.Env;
 import com.brian.common.tools.GsonHelper;
+import com.brian.common.utils.EncryptUtil;
 import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.MainActivity;
 import com.brian.wmessage.R;
@@ -62,6 +63,7 @@ public class BmobMessageHandler extends BmobIMMessageHandler {
     private void executeMessage(final MessageEvent event) {
         LogUtil.d("event=" + GsonHelper.toJson(event));
         BmobIMMessage msg = event.getMessage();
+//        msg.setContent(EncryptUtil.decryptAES(msg.getContent(), msg.getConversationId()));
         if (BmobIMMessageType.getMessageTypeValue(msg.getMsgType()) == 0) {
             //自定义消息类型：0
             processCustomMessage(IMMessage.convert(msg), event.getFromUserInfo());

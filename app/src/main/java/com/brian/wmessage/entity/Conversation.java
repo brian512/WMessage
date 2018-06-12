@@ -36,7 +36,7 @@ public abstract class Conversation implements Serializable, Comparable {
     }
 
     public String getConversationId() {
-        return cId;
+        return mConversation.getConversationId();
     }
 
     public BmobIMConversation getConversation() {

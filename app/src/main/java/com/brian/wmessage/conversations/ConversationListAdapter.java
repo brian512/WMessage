@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.brian.common.utils.TimeUtil;
 import com.brian.common.views.recyclerview.BaseRecyclerAdapter;
 import com.brian.wmessage.R;
 import com.brian.wmessage.chat.ChatActivity;
@@ -53,7 +54,7 @@ public class ConversationListAdapter extends BaseRecyclerAdapter<Conversation, C
         item.getConversation().setConversationTitle(cName);
 
         holder.msgView.setText(item.getLastMessageContent().replace("\n", " "));
-        holder.timeView.setText(getChatTime(false, item.getLastMessageTime()));
+        holder.timeView.setText(TimeUtil.convTimeForChat(item.getLastMessageTime()));
 
         int unreadCnt = item.getUnReadCount();
         if (unreadCnt > 0) {

@@ -1,5 +1,7 @@
 package com.brian.wmessage.chat;
 
+import com.brian.common.tools.Env;
+import com.brian.common.utils.EncryptUtil;
 import com.brian.common.utils.LogUtil;
 import com.brian.wmessage.entity.IMMessage;
 import com.brian.wmessage.entity.P2PConversation;
@@ -44,34 +46,10 @@ public class MessageSendHelper {
         void onFinish(IMMessage message, int status);
     }
 
-    /**
-     * 消息发送监听器
-     */
-    private MessageSendListener mMessageSendListener = new MessageSendListener() {
-
-        @Override
-        public void onProgress(int value) {
-            super.onProgress(value);
-            //文件类型的消息才有进度值
-            LogUtil.i("onProgress：" + value);
-        }
-
-        @Override
-        public void onStart(BmobIMMessage msg) {
-            super.onStart(msg);
-            LogUtil.i("msg：" + msg);
-        }
-
-        @Override
-        public void done(BmobIMMessage msg, BmobException e) {
-            LogUtil.i("msg：" + msg);
-        }
-    };
-
 
     public void sendTextMessage(P2PConversation conversation, String text) {
         BmobIMTextMessage textMessage = new BmobIMTextMessage();
-        textMessage.setContent(text);
+        textMessage.setContent(EncryptUtil.encryptAES(text, conversation.getConversationId()));
         //可随意设置额外信息
 //        Map<String, Object> map = new HashMap<>();
 //        map.put("level", "1");
@@ -82,6 +60,7 @@ public class MessageSendHelper {
 
     public void sendTextMessage(P2PConversation conversation, String text, OnMessageSendListener listener) {
         BmobIMTextMessage textMessage = new BmobIMTextMessage();
+//        textMessage.setContent(EncryptUtil.encryptAES(text, conversation.getConversationId()));
         textMessage.setContent(text);
         sendMessage(conversation, textMessage, listener);
     }
