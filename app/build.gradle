@@ -1,23 +1,44 @@
 apply plugin: 'com.android.application'
 
+String getVersionName(int versionCode) { // 4000206 "4.1.2.4010206"
+    int major = versionCode / 1000000
+    int minor = (versionCode % 1000000) / 10000
+    int release = (versionCode % 10000) / 100
+//    int increace = versionCode % 100
+    return major + "." + minor + "." + release
+}
+
+// x.xx.xx.xx
+int VERSION_CODE = 1000001
+
 android {
-    compileSdkVersion 27
     defaultConfig {
         applicationId "com.brian.wmessage"
-        minSdkVersion 17
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode VERSION_CODE
+        versionName getVersionName(versionCode)
+        minSdkVersion project.MIN_SDK_VERSION as int
+        targetSdkVersion project.TARGET_SDK_VERSION as int
+        compileSdkVersion project.COMPILE_SDK_VERSION as int
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug{
+            // 显示Log
+            buildConfigField "boolean", "DEBUG_ENABLE", "true"
+            versionNameSuffix "-debug"
+            minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+        }
         release {
+            buildConfigField "boolean", "DEBUG_ENABLE", "false"
             // 启用混淆
             minifyEnabled false
             // Zipalign优化
             zipAlignEnabled true
             // 移除无用的resource文件
             shrinkResources false
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
