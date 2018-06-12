@@ -12,7 +12,12 @@ android {
     }
     buildTypes {
         release {
+            // 启用混淆
             minifyEnabled false
+            // Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -43,5 +48,5 @@ dependencies {
 
     implementation 'com.github.promeg:tinypinyin:1.0.0'
 
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
 }

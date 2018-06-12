@@ -228,8 +228,12 @@ public class ChatActivity extends BaseActivity implements IIMServiceStateListene
                 mChatAdapter.updateMessage(message);
             }
         };
-        MessageSendHelper.getInstance().sendTextMessage(mConversation, text, listener);
-        mMessageEt.setText("");
+        if (IMServiceManager.getInstance().checkConnectState()) {
+            MessageSendHelper.getInstance().sendTextMessage(mConversation, text, listener);
+            mMessageEt.setText("");
+        } else {
+            ToastUtil.showMsg("连接已断开，请稍候再试");
+        }
     }
 
     /**
@@ -271,6 +275,7 @@ public class ChatActivity extends BaseActivity implements IIMServiceStateListene
         LogUtil.d("state=" + state);
         if (state == IMServiceManager.STATE_CONNECTED) {
             queryMessages(true);
+            ToastUtil.showMsg("连接已恢复");
         }
     }
 }
