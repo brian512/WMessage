@@ -88,7 +88,7 @@ public class BmobMessageHandler extends BmobIMMessageHandler {
 
             BmobIMUserInfo info = event.getFromUserInfo();
             //这里可以是应用图标，也可以将聊天头像转成bitmap
-            Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
+            Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_logo);
             BmobNotificationManager.getInstance(context).showNotification(largeIcon,
                     info.getName(), msg.getContent(), "您有一条新消息", pendingIntent);
         } else {
